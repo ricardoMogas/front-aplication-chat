@@ -1,30 +1,50 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <LoginView v-if="loggedIn == false" />
+  <router-view v-else="loggedIn == true"/>
 </template>
 
+<script>
+import LoginView from './views/LoginView.vue';
+export default {
+  name: 'HomeView',
+  components: {
+    LoginView,
+  },
+  computed: {
+    loggedIn() {
+      return this.$store.state.logged;
+    },
+  },
+}
+</script>
+
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Quicksand', sans-serif;
 }
 
-nav {
-  padding: 30px;
+body {
+  justify-content: center;
+  align-items: center;
+  background: #000;
+  color: #fff;
 }
 
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
+/* Agregar aqui estilos generales */
 
-nav a.router-link-exact-active {
-  color: #42b983;
+.simpleButton {
+  padding: 5px;
+  background: #7355A4;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 1em;
+  letter-spacing: 0.05em;
+  cursor: pointer;
 }
 </style>
+
