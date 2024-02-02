@@ -1,6 +1,7 @@
 <template>
   <LoginView v-if="loggedIn == false" />
   <router-view v-else="loggedIn == true"/>
+{{ nombre }}
 </template>
 
 <script>
@@ -9,6 +10,11 @@ export default {
   name: 'HomeView',
   components: {
     LoginView,
+  },
+  data() {
+    return {
+      nombre: 'asdf'
+    }
   },
   computed: {
     loggedIn() {
@@ -19,7 +25,7 @@ export default {
 </script>
 
 <style>
-
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
 * {
   margin: 0;
   padding: 0;
@@ -45,6 +51,7 @@ body {
   font-size: 1em;
   letter-spacing: 0.05em;
   cursor: pointer;
+  margin: 10px;
 }
 </style>
 

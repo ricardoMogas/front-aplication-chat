@@ -15,13 +15,6 @@ const routes = [
     name: 'login',
     component: LoginView
   },
-  {
-    path: '/chat',
-    name: 'chat',
-    component: function () {
-      return import('../views/ChatView.vue')
-    }
-  }
 ]
 
 const router = createRouter({

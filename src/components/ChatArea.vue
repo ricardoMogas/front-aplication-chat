@@ -1,13 +1,20 @@
 <template>
     <div>
-        <h1>About View</h1>
-        <p>Welcome to the About page!</p>
+        <h1>This is the chat area</h1>
+        
     </div>
 </template>
 
 <script>
 export default {
-    name: 'AboutView',
+    name: 'ChatArea',
+    data: {
+
+    },
+    methods: {
+        sumar1(){}
+    },
+    
 }
 </script>
 

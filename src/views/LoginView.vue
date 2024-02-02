@@ -15,9 +15,8 @@
             </div>
 
             <div class="inputBox">
-
-              <input type="password" required> <i>Password</i>
-
+              <input :type="showPassword  ? 'text' : 'password'" v-model="password" required> <i>contraseña</i>
+              <button id="whachPassword" class="simpleButton" @click="toggleShowPassword">{{ showPassword ? 'Ocultar' : 'Mostrar' }}</button>
             </div>
 
             <div class="links"> 
@@ -42,9 +41,19 @@
 export default {
   name: 'LoginView',
   components: {},
+  data() {
+    return {
+      password: '',
+      showPassword: false
+    }
+  },
+  computed: {},
   methods: {
     login(){
       this.$store.commit('login', true)
+    },
+    toggleShowPassword() {
+      this.showPassword = !this.showPassword;
     }
   }
 }
@@ -65,7 +74,6 @@ body {
   color: #fff;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
 section {
   position: absolute;
   width: 100vw;
@@ -83,7 +91,7 @@ section::before { /* Efecto de fondo de ondulacion */
   position: absolute;
   width: 100%;
   height: 100%;
-  background: linear-gradient(#000, #7355A4, #000);
+  background: repeating-linear-gradient(#000, #7355A4, #000);
   animation: animate 5s linear infinite;
 }
 @keyframes animate {
@@ -99,13 +107,13 @@ section::before { /* Efecto de fondo de ondulacion */
 section .signin {
   position: absolute;
   width: 400px;
+  height: 100%;
   background: #222;
   z-index: 1000;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 40px;
-  border-radius: 4px;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 9);
 }
 

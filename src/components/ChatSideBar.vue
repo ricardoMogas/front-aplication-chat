@@ -1,12 +1,12 @@
 <template>
     <div>
-        <h1>Lista de objetos</h1>
+        <h1>This is the chat list</h1>
     </div>
 </template>
 
 <script>
 export default {
-    name: 'ChatList',
+    name: 'ChatSideBar',
 }
 </script>
 

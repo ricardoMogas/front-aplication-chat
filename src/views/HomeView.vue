@@ -1,8 +1,12 @@
 <template>
   <div class="home">
     <main class="grid">
-      <section class="sideBar"></section>
-      <section class="chat"></section>
+      <section class="sideBar">
+        <ChatSideBar></ChatSideBar>
+      </section>
+      <section class="chat">
+        <ChatArea></ChatArea>
+      </section>
     </main>
     <button class="simpleButton" @click="logOut">LogOut</button>
   </div>
@@ -10,12 +14,15 @@
 
 <script>
 // @ is an alias to /src
-import ChatList from '@/components/ChatList.vue';
+import ChatArea from '@/components/ChatArea.vue';
+import ChatSideBar from '@/components/ChatSideBar.vue';
 export default {
   name: 'HomeView',
   components: {
-    ChatList,
-  },
+    ChatSideBar,
+    ChatArea,
+    ChatSideBar
+},
   data() {
     return {
     }
