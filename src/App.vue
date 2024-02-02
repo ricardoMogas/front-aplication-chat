@@ -1,7 +1,6 @@
 <template>
   <LoginView v-if="loggedIn == false" />
   <router-view v-else="loggedIn == true"/>
-{{ nombre }}
 </template>
 
 <script>
@@ -52,6 +51,26 @@ body {
   letter-spacing: 0.05em;
   cursor: pointer;
   margin: 10px;
+}
+.simpleButton svg {
+  display: flex;
+  padding: 5px;
+  height: 100%;
+}
+
+.simpleInput {
+  background: #6F6D73;
+  border: none;
+  padding: 5px 5px 5px;
+  border-radius: 4px;
+  color: #fff;
+  font-weight: 500;
+  font-size: 1em;
+  width: 85%;
+}
+.simpleInput:focus {
+  outline: 3px #7355A4 solid;
+  background: #000 !important; /* CORREGIR, NO USAR SIEMPRE !important */
 }
 </style>
 
