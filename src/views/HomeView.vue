@@ -22,7 +22,7 @@ export default {
     ChatSideBar,
     ChatArea,
     ChatSideBar
-},
+  },
   data() {
     return {
     }

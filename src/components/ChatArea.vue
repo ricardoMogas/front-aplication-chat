@@ -8,13 +8,6 @@
 <script>
 export default {
     name: 'ChatArea',
-    data: {
-
-    },
-    methods: {
-        sumar1(){}
-    },
-    
 }
 </script>
 
