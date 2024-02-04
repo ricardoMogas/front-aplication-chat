@@ -8,7 +8,6 @@
         <ChatArea></ChatArea>
       </section>
     </main>
-    <button class="simpleButton" @click="logOut">LogOut</button>
   </div>
 </template>
 
@@ -32,17 +31,10 @@ export default {
       return this.$store.state.logged;
     },
   },
-  methods: {
-    logOut() {
-      this.$store.commit('login', false)
-    }
-  }
 }
 </script>
 
 <style scoped>
-
-
 .grid {
   display: grid;
   height: auto;
@@ -56,8 +48,7 @@ export default {
 }
 
 .home .grid .chat {
-  padding: 20px;
-  border: .1px solid #ddd; /* Borde para visualización */
+  /* border: .1px solid #ddd;  Borde para visualización */
 }
 
 </style>    
