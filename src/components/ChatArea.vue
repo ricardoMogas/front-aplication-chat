@@ -3,41 +3,170 @@
         <nav class="navbar">
             <button class="simpleButton" @click="logOut">LogOut</button>
         </nav>
-        <main class="mainChat"> Ventana de chat</main>
+
+        <main class="mainChat">
+            <div class="messages" v-for="item in data" :key="item.Date">
+                <p class="fechaChat">{{ item.Date }}</p>
+                <div :class="typeOfMessage(message.id)" v-for="message in item.message" :key="message.id">
+
+                    <h3>{{ message.user }}</h3>
+                    <small style="color: rgba(255, 255, 255, 0.763); margin-bottom: 10px;">{{ message.hour }}</small>
+                    <p class="bodyMessage">{{ message.message }}</p>
+                </div>
+            </div>
+        </main>
+
         <footer class="inputChat">
             <div class="conversationPanel">
                 <button class="simpleButton">
-                    <svg class="feather feather-plus sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <svg class="feather feather-plus sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="24"
+                        height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
                     </svg>
                 </button>
                 <button class="simpleButton">
-                    <svg class="feather feather-smile sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
-                    <line x1="9" y1="9" x2="9.01" y2="9"></line>
-                    <line x1="15" y1="9" x2="15.01" y2="9"></line>
+                    <svg class="feather feather-smile sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="24"
+                        height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+                        <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                        <line x1="15" y1="9" x2="15.01" y2="9"></line>
                     </svg>
                 </button>
-                <input class="simpleInput" placeholder="Type a message..."/>
+                <input class="simpleInput" placeholder="Type a message..." />
                 <button class="simpleButton">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-reactid="1036">
-                    <line x1="22" y1="2" x2="11" y2="13"></line>
-                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        aria-hidden="true" data-reactid="1036">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
                     </svg>
                 </button>
             </div>
         </footer>
+
     </div>
 </template>
 
 <script>
 export default {
     name: 'ChatArea',
+    data: function () {
+        return {
+            messageUser: {
+                id: 4,
+                user: 'Ricardo',
+                hour: '',
+                message: ''
+            },
+            user: 'Ricardo',
+            id: 4,
+            data: [
+                {
+                    Date: '12/12/2020',
+                    message: [
+                        {
+                            id: 4,
+                            user: 'Ricardo',
+                            hour: '12:00',
+                            message: 'Hoasdfadfadfla'
+                        },
+                        {
+                            id: 1,
+                            user: 'Juan',
+                            hour: '12:00',
+                            message: 'loremsdfa asdfasddddddddddddddddddddddddddddddddddddddddddddddddddddddddd'
+                        },
+                        {
+                            id: 4,
+                            user: 'Ricardo',
+                            hour: '12:00',
+                            message: 'Haafsdfola'
+                        },
+                        {
+                            id: 1,
+                            user: 'Juan',
+                            hour: '12:00',
+                            message: 'loremsdfa asdfasddddddddddddddddddddddddddddddddddddddddddddddddddddddddd'
+                        },
+                        {
+                            id: 1,
+                            user: 'Juan',
+                            hour: '12:00',
+                            message: 'loremsdfa asdfasddddddddddddddddddddddddddddddddddddddddddddddddddddddddd'
+                        },
+                        {
+                            id: 1,
+                            user: 'Juan',
+                            hour: '12:00',
+                            message: 'loremsdfa asdfasddddddddddddddddddddddddddddddddddddddddddddddddddddddddd'
+                        },
+                        {
+                            id: 1,
+                            user: 'Juan',
+                            hour: '12:00',
+                            message: 'loremsdfa asdfasddddddddddddddddddddddddddddddddddddddddddddddddddddddddd'
+                        },
+                        {
+                            id: 1,
+                            user: 'Juan',
+                            hour: '12:00',
+                            message: 'loremsdfa asdfasddddddddddddddddddddddddddddddddddddddddddddddddddddddddd'
+                        },
+                        {
+                            id: 1,
+                            user: 'Juan',
+                            hour: '12:00',
+                            message: 'loremsdfa asdfasddddddddddddddddddddddddddddddddddddddddddddddddddddddddd'
+                        },
+                        {
+                            id: 1,
+                            user: 'Juan',
+                            hour: '12:00',
+                            message: 'loremsdfa asdfasddddddddddddddddddddddddddddddddddddddddddddddddddddddddd'
+                        },
+                        {
+                            id: 1,
+                            user: 'Juan',
+                            hour: '12:00',
+                            message: 'loremsdfa asdfasddddddddddddddddddddddddddddddddddddddddddddddddddddddddd'
+                        },
+
+                    ]
+                },
+                {
+                    Date: '13/12/2020',
+                    message: [
+                        {
+                            id: 4,
+                            user: 'Ricardo',
+                            hour: '12:00',
+                            message: 'asdf'
+                        },
+                        {
+                            id: 1,
+                            user: 'Juan',
+                            hour: '12:00',
+                            message: 'Hoasdfla'
+                        },
+                    ]
+                }
+            ]
+        }
+    },
+    computed: {
+    },
     methods: {
         logOut() {
-        this.$store.commit('login', false)
+            this.$store.commit('login', false)
+        },
+        typeOfMessage(id) {
+            return id === this.id ? 'ContentMessageUser' : 'ContentMessage'
+        },
+        sendMessage() {
         }
     }
 }
@@ -48,25 +177,83 @@ export default {
 .gridChat {
     display: grid;
     grid-template-columns: 100%;
-    grid-template-rows: 10% 80% 10%; /* Updated row sizes */
-    height: 100vh; /* determina el alto de la pantalla para que se adapten las columnas */
+    grid-template-rows: 10% 80% 10%;
+    /* Updated row sizes */
+    height: 100vh;
+    /* determina el alto de la pantalla para que se adapten las columnas */
 }
+
 /* Vista del navbar *****************/
 .navbar {
     background-color: #222;
+    text-align: end;
 }
+
 .navbar button {
     padding: 10px;
     margin: 10px;
 }
-/* Vista del los mensajes ***********/
+
+/*********** Vista del los mensajes ***********/
 .mainChat {
+    overflow-y: auto;
+    height: auto; /* Ajusta esto a la altura que desees */
+    background: linear-gradient(to bottom, #222, #00000093);
+}
+.messages {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    word-wrap: break-word;
+}
+.mainChat .messages .fechaChat {
+    color: #fff;
+    text-align: center;
+    margin: 10px;
 }
 
-/** Entrada del chat ***************/
-.inputChat {
+
+
+.ContentMessageUser { /* Mensaje de agenos */
+    background: #371965;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
     padding: 10px;
+    border: none;
+    align-self: flex-end;
+    text-align: end; /* Alinea el texto a la derecha */
+    margin-bottom: 10px;
+    max-width: 250px;/* ajusta tamaño maximo */
+    word-wrap: break-word;/* Que no se salga del contenedor*/
+    box-shadow: 0 0 5px #00000093;
 }
+
+.ContentMessageUser .bodyMessage {
+    color: #fff;
+    font-size: 1em;
+    margin: 5px 0;
+}
+.ContentMessage { /* Mensaje de Propios */
+    background: #7355A4;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    border: none;
+    align-self: flex-start;
+    margin-bottom: 10px;
+    max-width: 250px;/* ajusta tamaño maximo */
+    word-wrap: break-word;/* Que no se salga del contenedor*/
+    box-shadow: 0 0 5px #00000093;
+}
+
+
+/*********** Entrada del chat ***********/
+.inputChat {
+    padding: 0px 10px 10px 10px;
+}
+
 .inputChat .conversationPanel {
     display: flex;
     justify-content: space-between;

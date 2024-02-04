@@ -48,7 +48,7 @@ export default {
 }
 
 .home .grid .chat {
-  border: .1px solid #ddd; /* Borde para visualización */
+  /* border: .1px solid #ddd;  Borde para visualización */
 }
 
 </style>    
