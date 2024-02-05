@@ -36,7 +36,7 @@ export default {
     return {
       chats: [
         { username: 'Santiago Vela', lastMessage: 'Hola, ¿cómo estás?' },
-        { username: 'Miguel Dzbi', lastMessage: '¡Hola! Estoy bien, gracias.' },
+        { username: 'Miguel Dzib', lastMessage: '¡Hola! Estoy bien, gracias.' },
         { username: 'Ricardo Moo', lastMessage: 'Otro mensaje de ejemplo.' },
         { username: 'Kevin Chan', lastMessage: 'Mensaje del Usuario 4.' },
         { username: 'Pedro Sola', lastMessage: 'Mensaje del Usuario 5.' },
