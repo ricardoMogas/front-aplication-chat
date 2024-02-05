@@ -43,7 +43,6 @@ export default {
 }
 
 .home .grid .sideBar {
-  padding: 20px;
   border: .1px solid #ddd; /* Borde para visualización */
 }
 

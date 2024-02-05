@@ -7,7 +7,8 @@
     </div>
 
     <!-- Lista de chats -->
-    <div v-for="(chat, index) in filteredChats" :key="index" class="chat-item">
+    <div class="groupList">
+      <div v-for="(chat, index) in filteredChats" :key="index" class="chat-item">
       <!-- Botones del lado derecho para abrir el chat -->
       <button class="open-chat-button" @click="openChat(chat)">
         <i class="fas fa-comment"></i>
@@ -26,6 +27,8 @@
         <p>{{ chat.lastMessage }}</p>
       </div>
     </div>
+    </div>
+
   </div>
 </template>
   
@@ -41,6 +44,7 @@ export default {
         { username: 'Kevin Chan', lastMessage: 'Mensaje del Usuario 4.' },
         { username: 'Pedro Sola', lastMessage: 'Mensaje del Usuario 5.' },
         { username: 'Rosa Mel', lastMessage: 'Mensaje del Usuario 6.' },
+        { username: 'Rosa Mel', lastMessage: 'Mensaje del Usuario 7.' },
       ],
       searchQuery: '',
     };
@@ -65,11 +69,15 @@ export default {
 <style scoped>
 
 /* Estilos específicos del componente aquí CSS */
+.groupList{
+  overflow-y: auto;
+  height: 558px; /* Ajusta esto a la altura que desees */
+}
 
 .chat-list-container {
   display: flex;
+  background: #222;
   flex-direction: column;
-  margin-top: 16px;
   /* Distancia entre la barra de búsqueda y la lista de usuarios */
 }
 
@@ -77,7 +85,7 @@ export default {
   display: flex;
   align-items: center;
   padding: 10px;
-  background-color: #e0e0e0;
+  background-color: #222;
   /* Gris bajo */
   color: #c8a2c8;
   /* Morado lila */
