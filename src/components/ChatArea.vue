@@ -52,10 +52,12 @@
 </template>
 
 <script>
+import * as signalR from '@microsoft/signalr';
 export default {
     name: 'ChatArea',
     data: function () {
         return {
+            connection: null,
             messageUser: {
                 id: 4,
                 user: 'Ricardo',
@@ -64,97 +66,8 @@ export default {
             },
             user: 'Ricardo',
             id: 4,
-            data: [
-                {
-                    Date: '12/12/2020',
-                    message: [
-                        {
-                            id: 4,
-                            user: 'Ricardo',
-                            hour: '12:00',
-                            message: 'Hoasdfadfadfla'
-                        },
-                        {
-                            id: 1,
-                            user: 'Juan',
-                            hour: '12:00',
-                            message: 'loremsdfa asdfasddddddddddddddddddddddddddddddddddddddddddddddddddddddddd'
-                        },
-                        {
-                            id: 4,
-                            user: 'Ricardo',
-                            hour: '12:00',
-                            message: 'Haafsdfola'
-                        },
-                        {
-                            id: 1,
-                            user: 'Juan',
-                            hour: '12:00',
-                            message: 'loremsdfa asdfasddddddddddddddddddddddddddddddddddddddddddddddddddddddddd'
-                        },
-                        {
-                            id: 1,
-                            user: 'Juan',
-                            hour: '12:00',
-                            message: 'loremsdfa asdfasddddddddddddddddddddddddddddddddddddddddddddddddddddddddd'
-                        },
-                        {
-                            id: 1,
-                            user: 'Juan',
-                            hour: '12:00',
-                            message: 'loremsdfa asdfasddddddddddddddddddddddddddddddddddddddddddddddddddddddddd'
-                        },
-                        {
-                            id: 1,
-                            user: 'Juan',
-                            hour: '12:00',
-                            message: 'loremsdfa asdfasddddddddddddddddddddddddddddddddddddddddddddddddddddddddd'
-                        },
-                        {
-                            id: 1,
-                            user: 'Juan',
-                            hour: '12:00',
-                            message: 'loremsdfa asdfasddddddddddddddddddddddddddddddddddddddddddddddddddddddddd'
-                        },
-                        {
-                            id: 1,
-                            user: 'Juan',
-                            hour: '12:00',
-                            message: 'loremsdfa asdfasddddddddddddddddddddddddddddddddddddddddddddddddddddddddd'
-                        },
-                        {
-                            id: 1,
-                            user: 'Juan',
-                            hour: '12:00',
-                            message: 'loremsdfa asdfasddddddddddddddddddddddddddddddddddddddddddddddddddddddddd'
-                        },
-                        {
-                            id: 1,
-                            user: 'Juan',
-                            hour: '12:00',
-                            message: 'loremsdfa asdfasddddddddddddddddddddddddddddddddddddddddddddddddddddddddd'
-                        },
-
-                    ]
-                },
-                {
-                    Date: '13/12/2020',
-                    message: [
-                        {
-                            id: 4,
-                            user: 'Ricardo',
-                            hour: '12:00',
-                            message: 'asdf'
-                        },
-                        {
-                            id: 1,
-                            user: 'Juan',
-                            hour: '12:00',
-                            message: 'Hoasdfla'
-                        },
-                    ]
-                }
-            ]
+            groupName: 'forumGroup',
+            data: []
         }
     },
     computed: {
@@ -166,9 +79,30 @@ export default {
         typeOfMessage(id) {
             return id === this.id ? 'ContentMessageUser' : 'ContentMessage'
         },
-        sendMessage() {
+        sendMessage(user, message) {
+            this.connection.send("SendMessage", user, message)
+                .then(() => console.log('Message sent'))
+                .catch(err => console.log('Error while sending message: ' + err));
         }
-    }
+    },
+    mounted() {
+        this.connection = new signalR.HubConnectionBuilder()
+            .withUrl("https://chat-penguin-api.onrender.com/chat")
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
+
+        this.connection.on("ReceiveMessage", (user, message) => {
+            console.log(user + " says " + message);
+        });
+
+        this.connection.start()
+            .then(() => {
+                console.log('Connection started');
+                if (this.hubConnection) {
+                    this.hubConnection.invoke('AddToGroup', this.groupName);
+                }
+            }).catch(err => console.log('Error while starting connection: ' + err));
+    },
 }
 </script>
 
@@ -197,15 +131,18 @@ export default {
 /*********** Vista del los mensajes ***********/
 .mainChat {
     overflow-y: auto;
-    height: auto; /* Ajusta esto a la altura que desees */
+    height: auto;
+    /* Ajusta esto a la altura que desees */
     background: linear-gradient(to bottom, #222, #00000093);
 }
+
 .messages {
     display: flex;
     flex-direction: column;
     padding: 10px;
     word-wrap: break-word;
 }
+
 .mainChat .messages .fechaChat {
     color: #fff;
     text-align: center;
@@ -214,7 +151,8 @@ export default {
 
 
 
-.ContentMessageUser { /* Mensaje de agenos */
+.ContentMessageUser {
+    /* Mensaje de agenos */
     background: #371965;
     border-radius: 4px;
     display: flex;
@@ -222,10 +160,13 @@ export default {
     padding: 10px;
     border: none;
     align-self: flex-end;
-    text-align: end; /* Alinea el texto a la derecha */
+    text-align: end;
+    /* Alinea el texto a la derecha */
     margin-bottom: 10px;
-    max-width: 250px;/* ajusta tamaño maximo */
-    word-wrap: break-word;/* Que no se salga del contenedor*/
+    max-width: 250px;
+    /* ajusta tamaño maximo */
+    word-wrap: break-word;
+    /* Que no se salga del contenedor*/
     box-shadow: 0 0 5px #00000093;
 }
 
@@ -234,7 +175,9 @@ export default {
     font-size: 1em;
     margin: 5px 0;
 }
-.ContentMessage { /* Mensaje de Propios */
+
+.ContentMessage {
+    /* Mensaje de Propios */
     background: #7355A4;
     border-radius: 4px;
     display: flex;
@@ -243,8 +186,10 @@ export default {
     border: none;
     align-self: flex-start;
     margin-bottom: 10px;
-    max-width: 250px;/* ajusta tamaño maximo */
-    word-wrap: break-word;/* Que no se salga del contenedor*/
+    max-width: 250px;
+    /* ajusta tamaño maximo */
+    word-wrap: break-word;
+    /* Que no se salga del contenedor*/
     box-shadow: 0 0 5px #00000093;
 }
 
