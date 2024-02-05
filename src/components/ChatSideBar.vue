@@ -89,20 +89,22 @@ export default {
 
 .groupList {
   overflow-y: auto;
-  height: 537px; /* Ajusta esto a la altura deseada */
+  height: 537px;
+  /* Ajusta esto a la altura deseada */
 }
 
 .profile-icon-large {
   width: 50px;
   height: 50px;
-  background-color: #c8a2c8; /* Morado lila */
+  background-color: #c8a2c8;
+  /* Morado lila */
   border-radius: 50%;
   margin-right: 15px;
 }
 
 .chat-list-container {
   display: flex;
-  background: #222;
+  background: repeating-linear-gradient(#332638, #6d5391, #332638);
   flex-direction: column;
   /* Distancia entre la barra de búsqueda y la lista de usuarios */
 }
@@ -111,8 +113,9 @@ export default {
   display: flex;
   align-items: center;
   padding: 10px;
-  background-color: #222; /* Gris bajo */
-  color: #c8a2c8; /* Morado lila */
+  background: repeating-linear-gradient(#222, #635f69, #222);
+  color: #c8a2c8;
+  /* Morado lila */
 }
 
 .search-bar input {
@@ -138,14 +141,16 @@ export default {
 .profile-icon {
   width: 40px;
   height: 40px;
-  background-color: #c8a2c8; /* Morado lila */
+  background-color: #c8a2c8;
+  /* Morado lila */
   border-radius: 50%;
   margin-right: 15px;
 }
 
 .open-chat-button {
   margin-right: 10px;
-  background-color: #25d366; /* Verde de WhatsApp */
+  background-color: #25d366;
+  /* Verde de WhatsApp */
   color: #fff;
   border: none;
   border-radius: 50%;
@@ -160,5 +165,4 @@ export default {
 h3,
 p {
   margin: 0;
-}
-</style>
+}</style>
