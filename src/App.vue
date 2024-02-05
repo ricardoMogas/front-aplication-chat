@@ -6,13 +6,13 @@
 <script>
 import LoginView from './views/LoginView.vue';
 export default {
-  name: 'HomeView',
+  name: 'App',
   components: {
     LoginView,
   },
   data() {
     return {
-      nombre: 'asdf'
+      nombre: 'asdf',
     }
   },
   computed: {
