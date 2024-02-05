@@ -42,12 +42,4 @@ export default {
   height: 100vh;
 }
 
-.home .grid .sideBar {
-  border: .1px solid #ddd; /* Borde para visualización */
-}
-
-.home .grid .chat {
-  /* border: .1px solid #ddd;  Borde para visualización */
-}
-
 </style>    
