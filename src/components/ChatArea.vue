@@ -37,7 +37,7 @@
                     </svg>
                 </button>
                 <input class="simpleInput" placeholder="Type a message..." />
-                <button class="simpleButton">
+                <button @click="sendMessage()" class="simpleButton">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                         aria-hidden="true" data-reactid="1036">
@@ -52,10 +52,13 @@
 </template>
 
 <script>
+import * as signalR from '@microsoft/signalr';
+
 export default {
     name: 'ChatArea',
     data: function () {
         return {
+            connection: null,
             messageUser: {
                 id: 4,
                 user: 'Ricardo',
@@ -64,111 +67,42 @@ export default {
             },
             user: 'Ricardo',
             id: 4,
-            data: [
-                {
-                    Date: '12/12/2020',
-                    message: [
-                        {
-                            id: 4,
-                            user: 'Ricardo',
-                            hour: '12:00',
-                            message: 'Hoasdfadfadfla'
-                        },
-                        {
-                            id: 1,
-                            user: 'Juan',
-                            hour: '12:00',
-                            message: 'loremsdfa asdfasddddddddddddddddddddddddddddddddddddddddddddddddddddddddd'
-                        },
-                        {
-                            id: 4,
-                            user: 'Ricardo',
-                            hour: '12:00',
-                            message: 'Haafsdfola'
-                        },
-                        {
-                            id: 1,
-                            user: 'Juan',
-                            hour: '12:00',
-                            message: 'loremsdfa asdfasddddddddddddddddddddddddddddddddddddddddddddddddddddddddd'
-                        },
-                        {
-                            id: 1,
-                            user: 'Juan',
-                            hour: '12:00',
-                            message: 'loremsdfa asdfasddddddddddddddddddddddddddddddddddddddddddddddddddddddddd'
-                        },
-                        {
-                            id: 1,
-                            user: 'Juan',
-                            hour: '12:00',
-                            message: 'loremsdfa asdfasddddddddddddddddddddddddddddddddddddddddddddddddddddddddd'
-                        },
-                        {
-                            id: 1,
-                            user: 'Juan',
-                            hour: '12:00',
-                            message: 'loremsdfa asdfasddddddddddddddddddddddddddddddddddddddddddddddddddddddddd'
-                        },
-                        {
-                            id: 1,
-                            user: 'Juan',
-                            hour: '12:00',
-                            message: 'loremsdfa asdfasddddddddddddddddddddddddddddddddddddddddddddddddddddddddd'
-                        },
-                        {
-                            id: 1,
-                            user: 'Juan',
-                            hour: '12:00',
-                            message: 'loremsdfa asdfasddddddddddddddddddddddddddddddddddddddddddddddddddddddddd'
-                        },
-                        {
-                            id: 1,
-                            user: 'Juan',
-                            hour: '12:00',
-                            message: 'loremsdfa asdfasddddddddddddddddddddddddddddddddddddddddddddddddddddddddd'
-                        },
-                        {
-                            id: 1,
-                            user: 'Juan',
-                            hour: '12:00',
-                            message: 'loremsdfa asdfasddddddddddddddddddddddddddddddddddddddddddddddddddddddddd'
-                        },
-
-                    ]
-                },
-                {
-                    Date: '13/12/2020',
-                    message: [
-                        {
-                            id: 4,
-                            user: 'Ricardo',
-                            hour: '12:00',
-                            message: 'asdf'
-                        },
-                        {
-                            id: 1,
-                            user: 'Juan',
-                            hour: '12:00',
-                            message: 'Hoasdfla'
-                        },
-                    ]
-                }
-            ]
+            groupName: 'forumGroup',
+            data: []  // Cambiado de 'messages' a 'data'
         }
-    },
-    computed: {
     },
     methods: {
         logOut() {
-            this.$store.commit('login', false)
+            this.$store.commit('login', false);
         },
         typeOfMessage(id) {
-            return id === this.id ? 'ContentMessageUser' : 'ContentMessage'
+            return id === this.id ? 'ContentMessageUser' : 'ContentMessage';
         },
         sendMessage() {
+            this.connection.invoke("SendMessage", this.user, this.messageUser.message, this.groupName)
+            .then(() => console.log('Message sent', this.user, this.messageUser.message, this.groupName))
+            .catch(err => console.log('Error while sending message: ' + err));
         }
-    }
+    },
+    mounted() {
+        this.connection = new signalR.HubConnectionBuilder()
+            .withUrl("https://chat-penguin-api.onrender.com/chat")
+            .build();
+
+        this.connection.start().then(() => {
+                console.log('Connection started');
+                if (this.connection) {
+                    this.connection.invoke('AddToGroup', this.groupName);
+                    console.log('Connected to group', this.groupName);
+                }
+            }).catch(err => console.log('Error while starting connection: ' + err));
+
+        this.connection.on("ReceiveMessage", (user, message) => {
+            this.data.push(`${user}: ${message}`);  // Cambiado de 'messages' a 'data'
+            const receivedMessage = `${user}: ${message}`;
+            console.log(receivedMessage);
+        });
+    },
 }
 </script>
 
@@ -197,15 +131,17 @@ export default {
 /*********** Vista del los mensajes ***********/
 .mainChat {
     overflow-y: auto;
-    height: auto; /* Ajusta esto a la altura que desees */
-    background: linear-gradient(to bottom, #222, #00000093);
+    height: auto;
+    /* Ajusta esto a la altura que desees */
 }
+
 .messages {
     display: flex;
     flex-direction: column;
     padding: 10px;
     word-wrap: break-word;
 }
+
 .mainChat .messages .fechaChat {
     color: #fff;
     text-align: center;
@@ -214,7 +150,8 @@ export default {
 
 
 
-.ContentMessageUser { /* Mensaje de agenos */
+.ContentMessageUser {
+    /* Mensaje de agenos */
     background: #371965;
     border-radius: 4px;
     display: flex;
@@ -222,10 +159,13 @@ export default {
     padding: 10px;
     border: none;
     align-self: flex-end;
-    text-align: end; /* Alinea el texto a la derecha */
+    text-align: end;
+    /* Alinea el texto a la derecha */
     margin-bottom: 10px;
-    max-width: 250px;/* ajusta tamaño maximo */
-    word-wrap: break-word;/* Que no se salga del contenedor*/
+    max-width: 250px;
+    /* ajusta tamaño maximo */
+    word-wrap: break-word;
+    /* Que no se salga del contenedor*/
     box-shadow: 0 0 5px #00000093;
 }
 
@@ -234,7 +174,9 @@ export default {
     font-size: 1em;
     margin: 5px 0;
 }
-.ContentMessage { /* Mensaje de Propios */
+
+.ContentMessage {
+    /* Mensaje de Propios */
     background: #7355A4;
     border-radius: 4px;
     display: flex;
@@ -243,8 +185,10 @@ export default {
     border: none;
     align-self: flex-start;
     margin-bottom: 10px;
-    max-width: 250px;/* ajusta tamaño maximo */
-    word-wrap: break-word;/* Que no se salga del contenedor*/
+    max-width: 250px;
+    /* ajusta tamaño maximo */
+    word-wrap: break-word;
+    /* Que no se salga del contenedor*/
     box-shadow: 0 0 5px #00000093;
 }
 
