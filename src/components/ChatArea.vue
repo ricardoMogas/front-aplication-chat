@@ -37,7 +37,7 @@
                     </svg>
                 </button>
                 <input class="simpleInput" placeholder="Type a message..." />
-                <button class="simpleButton">
+                <button @click="sendMessage()" class="simpleButton">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                         aria-hidden="true" data-reactid="1036">
@@ -53,6 +53,7 @@
 
 <script>
 import * as signalR from '@microsoft/signalr';
+
 export default {
     name: 'ChatArea',
     data: function () {
@@ -67,41 +68,40 @@ export default {
             user: 'Ricardo',
             id: 4,
             groupName: 'forumGroup',
-            data: []
+            data: []  // Cambiado de 'messages' a 'data'
         }
-    },
-    computed: {
     },
     methods: {
         logOut() {
-            this.$store.commit('login', false)
+            this.$store.commit('login', false);
         },
         typeOfMessage(id) {
-            return id === this.id ? 'ContentMessageUser' : 'ContentMessage'
+            return id === this.id ? 'ContentMessageUser' : 'ContentMessage';
         },
-        sendMessage(user, message) {
-            this.connection.send("SendMessage", user, message)
-                .then(() => console.log('Message sent'))
-                .catch(err => console.log('Error while sending message: ' + err));
+        sendMessage() {
+            this.connection.invoke("SendMessage", this.user, this.messageUser.message, this.groupName)
+            .then(() => console.log('Message sent', this.user, this.messageUser.message, this.groupName))
+            .catch(err => console.log('Error while sending message: ' + err));
         }
     },
     mounted() {
         this.connection = new signalR.HubConnectionBuilder()
             .withUrl("https://chat-penguin-api.onrender.com/chat")
-            .configureLogging(signalR.LogLevel.Information)
             .build();
 
-        this.connection.on("ReceiveMessage", (user, message) => {
-            console.log(user + " says " + message);
-        });
-
-        this.connection.start()
-            .then(() => {
+        this.connection.start().then(() => {
                 console.log('Connection started');
-                if (this.hubConnection) {
-                    this.hubConnection.invoke('AddToGroup', this.groupName);
+                if (this.connection) {
+                    this.connection.invoke('AddToGroup', this.groupName);
+                    console.log('Connected to group', this.groupName);
                 }
             }).catch(err => console.log('Error while starting connection: ' + err));
+
+        this.connection.on("ReceiveMessage", (user, message) => {
+            this.data.push(`${user}: ${message}`);  // Cambiado de 'messages' a 'data'
+            const receivedMessage = `${user}: ${message}`;
+            console.log(receivedMessage);
+        });
     },
 }
 </script>
@@ -133,7 +133,6 @@ export default {
     overflow-y: auto;
     height: auto;
     /* Ajusta esto a la altura que desees */
-    background: linear-gradient(to bottom, #222, #00000093);
 }
 
 .messages {

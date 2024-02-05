@@ -89,7 +89,7 @@ export default {
 
 .groupList {
   overflow-y: auto;
-  height: 537px; /* Ajusta esto a la altura deseada */
+  height: 600px; /* Ajusta esto a la altura deseada */
 }
 
 .profile-icon-large {
