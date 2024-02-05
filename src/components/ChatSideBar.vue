@@ -103,9 +103,14 @@ export default {
 }
 
 .chat-list-container {
-  display: flex;
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: 10% 90%;
+  /* Updated row sizes */
+  height: 100vh;
+  /* determina el alto de la pantalla para que se adapten las columnas */
   background: repeating-linear-gradient(#332638, #6d5391, #332638);
-  flex-direction: column;
+  ;
   /* Distancia entre la barra de búsqueda y la lista de usuarios */
 }
 
@@ -165,4 +170,5 @@ export default {
 h3,
 p {
   margin: 0;
-}</style>
+}
+</style>
