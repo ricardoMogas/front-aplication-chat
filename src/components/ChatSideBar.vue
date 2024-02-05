@@ -1,31 +1,45 @@
 <template>
   <div class="chat-list-container">
+
     <!-- Barra de búsqueda -->
     <div class="search-bar">
+      <!-- Icono de perfil grande -->
+      <div class="profile-icon-large"></div>
+      <!-- Campo de búsqueda -->
       <input v-model="searchQuery" placeholder="Buscar..." />
+      <!-- Icono de búsqueda -->
       <i class="fas fa-search"></i>
     </div>
 
     <!-- Lista de chats -->
-    <div v-for="(chat, index) in filteredChats" :key="index" class="chat-item">
-      <!-- Botones del lado derecho para abrir el chat -->
-      <button class="open-chat-button" @click="openChat(chat)">
-        <i class="fas fa-comment"></i>
-      </button>
+    <div class="groupList">
+      <!-- Iterar a través de los chats filtrados -->
+      <div v-for="(chat, index) in filteredChats" :key="index" class="chat-item">
 
-      <!-- Ovalo de icono de perfil -->
-      <div class="profile-icon"></div>
+        <!-- Ovalo de icono de perfil pequeño en cada chat -->
+        <div class="profile-icon"></div>
 
-      <button class="simpleButton">
-        Entrar
-      </button>
+        <!-- Botón del lado derecho para abrir el chat -->
+        <button class="open-chat-button" @click="openChat(chat)">
+          <!-- Icono de comentario -->
+          <i class="fas fa-comment"></i>
+        </button>
 
-      <!-- Nombre del usuario y mensajes -->
-      <div class="chat-info">
-        <h3>{{ chat.username }}</h3>
-        <p>{{ chat.lastMessage }}</p>
+        <!-- Nombre del usuario y mensajes -->
+        <div class="chat-info">
+          <!-- Encabezado con el nombre del usuario -->
+          <h3>{{ chat.username }}</h3>
+          <!-- Párrafo con el último mensaje -->
+          <p>{{ chat.lastMessage }}</p>
+        </div>
+
+        <!-- Botón de entrada con estilo personalizado -->
+        <button class="simpleButton" style="float: right;">
+          Entrar
+        </button>
       </div>
     </div>
+
   </div>
 </template>
   
@@ -34,28 +48,36 @@ export default {
   name: 'ChatList',
   data() {
     return {
+      // Lista de chats con nombres de usuario y últimos mensajes
       chats: [
         { username: 'Santiago Vela', lastMessage: 'Hola, ¿cómo estás?' },
         { username: 'Miguel Dzib', lastMessage: '¡Hola! Estoy bien, gracias.' },
         { username: 'Ricardo Moo', lastMessage: 'Otro mensaje de ejemplo.' },
-        { username: 'Kevin Chan', lastMessage: 'Mensaje del Usuario 4.' },
-        { username: 'Pedro Sola', lastMessage: 'Mensaje del Usuario 5.' },
-        { username: 'Rosa Mel', lastMessage: 'Mensaje del Usuario 6.' },
+        { username: 'Kevin Chan', lastMessage: 'Hola, ¿cómo estás?' },
+        { username: 'Rosa Mela', lastMessage: '¡Hola! Estoy bien, gracias.' },
+        { username: 'Tela Compro', lastMessage: 'Otro mensaje de ejemplo.' },
+        { username: 'Carlos Mena', lastMessage: 'Hola, ¿cómo estás?' },
+        { username: 'Gabriela Cadena', lastMessage: '¡Hola! Estoy bien, gracias.' },
+        { username: 'Manuel Estrella', lastMessage: 'Otro mensaje de ejemplo.' },
+        // ... (otros chats)
       ],
+      // Consulta de búsqueda
       searchQuery: '',
     };
   },
   computed: {
+    // Computada para filtrar los chats basados en la barra de búsqueda
     filteredChats() {
-      // Filtrar los chats basados en la barra de búsqueda
       return this.chats.filter(chat =>
-        chat.username.toLowerCase().includes(this.searchQuery.toLowerCase())
+        chat.username.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+        chat.lastMessage.toLowerCase().includes(this.searchQuery.toLowerCase())
       );
-    },
+    }
+    ,
   },
   methods: {
+    // Método para abrir un chat con el usuario seleccionado
     openChat(chat) {
-      // Lógica para abrir el chat con el usuario seleccionado
       console.log('Abriendo chat con', chat.username);
     },
   },
@@ -63,13 +85,25 @@ export default {
 </script>
   
 <style scoped>
-
 /* Estilos específicos del componente aquí CSS */
+
+.groupList {
+  overflow-y: auto;
+  height: 537px; /* Ajusta esto a la altura deseada */
+}
+
+.profile-icon-large {
+  width: 50px;
+  height: 50px;
+  background-color: #c8a2c8; /* Morado lila */
+  border-radius: 50%;
+  margin-right: 15px;
+}
 
 .chat-list-container {
   display: flex;
+  background: #222;
   flex-direction: column;
-  margin-top: 16px;
   /* Distancia entre la barra de búsqueda y la lista de usuarios */
 }
 
@@ -77,10 +111,8 @@ export default {
   display: flex;
   align-items: center;
   padding: 10px;
-  background-color: #e0e0e0;
-  /* Gris bajo */
-  color: #c8a2c8;
-  /* Morado lila */
+  background-color: #222; /* Gris bajo */
+  color: #c8a2c8; /* Morado lila */
 }
 
 .search-bar input {
@@ -103,24 +135,22 @@ export default {
   border-bottom: 1px solid #ddd;
 }
 
-.open-chat-button {
-  margin-right: 10px;
-  background-color: #25d366;
-  /* Verde de WhatsApp */
-  color: #fff;
-  border: none;
-  border-radius: 50%;
-  padding: 10px;
-  cursor: pointer;
-}
-
 .profile-icon {
   width: 40px;
   height: 40px;
-  background-color: #c8a2c8;
-  /* Morado lila */
+  background-color: #c8a2c8; /* Morado lila */
   border-radius: 50%;
+  margin-right: 15px;
+}
+
+.open-chat-button {
   margin-right: 10px;
+  background-color: #25d366; /* Verde de WhatsApp */
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  padding: 6px;
+  cursor: pointer;
 }
 
 .chat-info {
@@ -130,5 +160,5 @@ export default {
 h3,
 p {
   margin: 0;
-}</style>
-  
+}
+</style>
