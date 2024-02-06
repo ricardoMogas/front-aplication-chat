@@ -10,7 +10,7 @@
 
             <div class="inputBox">
 
-              <input type="text" required> <i>Username</i>
+              <input v-model="userName" type="text" required> <i>Username</i>
 
             </div>
 
@@ -43,6 +43,7 @@ export default {
   components: {},
   data() {
     return {
+      userName: '',
       password: '',
       showPassword: false
     }
@@ -50,7 +51,11 @@ export default {
   computed: {},
   methods: {
     login(){
-      this.$store.commit('login', true)
+      const newValues = {
+        userName: this.userName,
+        status: true
+      }
+      this.$store.commit('login', newValues)
     },
     toggleShowPassword() {
       this.showPassword = !this.showPassword;
