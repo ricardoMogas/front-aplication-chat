@@ -74,10 +74,11 @@
         },
         methods: {
             logOut() {
-                this.$store.commit('login', { 
-                    userName: "", 
-                    status: false 
-                });
+                const newValues = {
+                    userName: '',
+                    status: false
+                }
+                this.$store.commit('login', newValues);
             },
             typeOfMessage(userName) {
                 return this.messageUser.user === userName ? 'ContentMessageUser' : 'ContentMessage';
@@ -89,7 +90,7 @@
                 })
                 .catch(err => console.log('Error while sending message: ' + err));
                 //agrega el objeto messageUser al array de messagesData
-                
+                /*
                 const data = {
                     user: this.messageUser.user,
                     hour: this.messageUser.hour,
@@ -97,11 +98,12 @@
                 }
                 this.messagesData.push(data);
                 this.messageUser.bodyMessage = "";
+                */
             }
         },
         mounted() {
             this.connection = new signalR.HubConnectionBuilder()
-                .withUrl("https://localhost:7159/chat")
+                .withUrl("http://localhost:5276/chat")
                 .build();
 
             this.connection.start().then(() => {
@@ -116,12 +118,13 @@
                 this.data.push(`${user}: ${message}`);  // Cambiado de 'messages' a 'data'
                 const receivedMessage = `${user}: ${message}`;
                 console.log(receivedMessage);
-                const data = {
+                /*const data = {
                     user: user,
                     hour: new Date().toLocaleTimeString(),
                     bodyMessage: message
                 }
                 this.messagesData.push(data);
+                */
             });
         },
     }
