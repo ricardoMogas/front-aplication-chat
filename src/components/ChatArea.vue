@@ -103,7 +103,7 @@
         },
         mounted() {
             this.connection = new signalR.HubConnectionBuilder()
-                .withUrl("https://localhost:7159/chat")
+                .withUrl("https://chat-penguin-api.onrender.com/chat")
                 .build();
 
             this.connection.start().then(() => {
