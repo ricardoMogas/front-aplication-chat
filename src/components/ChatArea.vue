@@ -81,8 +81,8 @@ export default {
             return id === this.id ? 'ContentMessageUser' : 'ContentMessage';
         },
         sendMessage() {
-            this.connection.invoke("SendMessage", this.user, this.messageUser.message, this.groupName)
-            .then(() => console.log('Message sent', this.user, this.messageUser.message, this.groupName))
+            this.connection.invoke("SendMessage", this.user, this.messageUser.message, this.groupNameProp)
+            .then(() => console.log('Message sent', this.user, this.messageUser.message, this.groupNameProp))
             .catch(err => console.log('Error while sending message: ' + err));
         }
     },
@@ -94,8 +94,8 @@ export default {
         this.connection.start().then(() => {
                 console.log('Connection started');
                 if (this.connection) {
-                    this.connection.invoke('AddToGroup', this.groupName);
-                    console.log('Connected to group', this.groupName);
+                    this.connection.invoke('AddToGroup', this.groupNameProp);
+                    console.log('Connected to group', this.groupNameProp);
                 }
             }).catch(err => console.log('Error while starting connection: ' + err));
 
