@@ -110,17 +110,16 @@ export default {
   height: 100vh;
   /* determina el alto de la pantalla para que se adapten las columnas */
   background: repeating-linear-gradient(#332638, #6d5391, #332638);
-  ;
-  /* Distancia entre la barra de búsqueda y la lista de usuarios */
 }
 
 .search-bar {
   display: flex;
   align-items: center;
   padding: 10px;
-  background: repeating-linear-gradient(#222, #635f69, #222);
+  background: #222;
   color: #c8a2c8;
-  /* Morado lila */
+  /* Morado lila */;
+  border-right: 1px solid #ffffff15;;
 }
 
 .search-bar input {
