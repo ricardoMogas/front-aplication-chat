@@ -56,6 +56,9 @@ import * as signalR from '@microsoft/signalr';
 
 export default {
     name: 'ChatArea',
+    props: {
+        groupNameProp: String
+    },
     data: function () {
         return {
             connection: null,
@@ -67,7 +70,6 @@ export default {
             },
             user: 'Ricardo',
             id: 4,
-            groupName: 'forumGroup',
             data: []  // Cambiado de 'messages' a 'data'
         }
     },

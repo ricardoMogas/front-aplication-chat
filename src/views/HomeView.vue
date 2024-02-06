@@ -2,10 +2,10 @@
   <div class="home">
     <main class="grid">
       <section class="sideBar">
-        <ChatSideBar></ChatSideBar>
+        <ChatSideBar ></ChatSideBar>
       </section>
       <section class="chat">
-        <ChatArea></ChatArea>
+        <ChatArea :groupNameProp="groupName"></ChatArea>
       </section>
     </main>
   </div>
@@ -24,6 +24,7 @@ export default {
   },
   data() {
     return {
+      groupName: 'forumGroup'
     }
   },
   computed: {
@@ -31,6 +32,8 @@ export default {
       return this.$store.state.logged;
     },
   },
+  methods: {
+  }
 }
 </script>
 
