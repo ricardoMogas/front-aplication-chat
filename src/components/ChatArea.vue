@@ -9,7 +9,7 @@
                     <!--
                         <p class="fechaChat">{{ item.Date }}</p>
                     -->
-                    <div :class="typeOfMessage(messageUser.user)" v-for="(item, index) in messagesData" :key="index">
+                    <div :class="typeOfMessage(item.user)" v-for="(item, index) in messagesData" :key="index">
                         <h3>{{ item.user }}</h3>
                         <small style="color: rgba(255, 255, 255, 0.763); margin-bottom: 10px;">{{ item.hour }}</small>
                         <p class="bodyMessage">{{ item.bodyMessage }}</p>
@@ -56,46 +56,55 @@
     <script>
     import * as signalR from '@microsoft/signalr';
 
-export default {
-    name: 'ChatArea',
-    props: {
-        groupNameProp: String
-    },
-    data: function () {
-        return {
-            connection: null,
-            messageUser: {
-                id: 4,
-                user: 'Ricardo',
-                hour: '',
-                message: ''
+    export default {
+        name: 'ChatArea',
+        props: {
+            groupNameProp: String
+        },
+        data: function () {
+            return {
+                connection: null,
+                messageUser: {
+                    user: this.$store.state.logged.userName,
+                    hour: new Date().toLocaleTimeString(),
+                    bodyMessage: ''
+                },
+                messagesData: []  // Cambiado de 'messages' a 'data'
+            }
+        },
+        methods: {
+            logOut() {
+                const newValues = {
+                    userName: '',
+                    status: false
+                }
+                this.$store.commit('login', newValues);
             },
-            user: 'Ricardo',
-            id: 4,
-            data: []  // Cambiado de 'messages' a 'data'
-        }
-    },
-    methods: {
-        logOut() {
-            const newValues = {
-        userName: this.userName,
-        status: true
-      }
-            this.$store.commit('login', false);
+            typeOfMessage(userName) {
+                return this.messageUser.user === userName ? 'ContentMessageUser' : 'ContentMessage';
+            },
+            async sendMessage() {
+                const data = {
+                    user: this.messageUser.user,
+                    hour: this.messageUser.hour,
+                    bodyMessage: this.messageUser.bodyMessage
+                }
+                console.log(data);
+                this.connection.invoke("SendMessage", this.messageUser.user, this.messageUser.bodyMessage, this.groupNameProp)
+                .then(() => {
+                    this.messagesData.push(data);
+                    this.messageUser.bodyMessage = '';
+                })
+                .catch(err => console.log('Error while sending message: ' + err));
+                
+                
+                
+            }
         },
-        typeOfMessage(id) {
-            return id === this.id ? 'ContentMessageUser' : 'ContentMessage';
-        },
-        sendMessage() {
-            this.connection.invoke("SendMessage", this.user, this.messageUser.message, this.groupNameProp)
-            .then(() => console.log('Message sent', this.user, this.messageUser.message, this.groupNameProp))
-            .catch(err => console.log('Error while sending message: ' + err));
-        }
-    },
-    mounted() {
-        this.connection = new signalR.HubConnectionBuilder()
-            .withUrl("https://chat-penguin-api.onrender.com/chat")
-            .build();
+        mounted() {
+            this.connection = new signalR.HubConnectionBuilder()
+                .withUrl("https://localhost:7159/chat")
+                .build();
 
             this.connection.start().then(() => {
                     console.log('Connection started');
@@ -106,16 +115,16 @@ export default {
                 }).catch(err => console.log('Error while starting connection: ' + err));
 
             this.connection.on("ReceiveMessage", (user, message) => {
-                this.data.push(`${user}: ${message}`);  // Cambiado de 'messages' a 'data'
-                const receivedMessage = `${user}: ${message}`;
-                console.log(receivedMessage);
-                /*const data = {
-                    user: user,
-                    hour: new Date().toLocaleTimeString(),
-                    bodyMessage: message
+                if (user != this.messageUser.user) {
+                    const data = {
+                        user: user,
+                        hour: new Date().toLocaleTimeString(),
+                        bodyMessage: message
+                    }
+                    this.messagesData.push(data);  // Cambiado de 'messages' a 'data'
+                    const receivedMessage = `${user}: ${message}`;
+                    console.log(receivedMessage);
                 }
-                this.messagesData.push(data);
-                */
             });
         },
     }
