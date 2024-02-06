@@ -56,55 +56,46 @@
     <script>
     import * as signalR from '@microsoft/signalr';
 
-    export default {
-        name: 'ChatArea',
-        props: {
-            groupNameProp: String
-        },
-        data: function () {
-            return {
-                connection: null,
-                messageUser: {
-                    user: this.$store.state.logged.userName,
-                    hour: new Date().toLocaleTimeString(),
-                    bodyMessage: ''
-                },
-                messagesData: []  // Cambiado de 'messages' a 'data'
-            }
-        },
-        methods: {
-            logOut() {
-                const newValues = {
-                    userName: '',
-                    status: false
-                }
-                this.$store.commit('login', newValues);
+export default {
+    name: 'ChatArea',
+    props: {
+        groupNameProp: String
+    },
+    data: function () {
+        return {
+            connection: null,
+            messageUser: {
+                id: 4,
+                user: 'Ricardo',
+                hour: '',
+                message: ''
             },
-            typeOfMessage(userName) {
-                return this.messageUser.user === userName ? 'ContentMessageUser' : 'ContentMessage';
-            },
-            sendMessage() {
-                this.connection.invoke("SendMessage", this.messageUser.user, this.messageUser.message, this.groupNameProp)
-                .then(() => {    
-                    console.log('Message sent: ', this.messageUser.bodyMessage);
-                })
-                .catch(err => console.log('Error while sending message: ' + err));
-                //agrega el objeto messageUser al array de messagesData
-                /*
-                const data = {
-                    user: this.messageUser.user,
-                    hour: this.messageUser.hour,
-                    bodyMessage: this.messageUser.bodyMessage
-                }
-                this.messagesData.push(data);
-                this.messageUser.bodyMessage = "";
-                */
-            }
+            user: 'Ricardo',
+            id: 4,
+            data: []  // Cambiado de 'messages' a 'data'
+        }
+    },
+    methods: {
+        logOut() {
+            const newValues = {
+        userName: this.userName,
+        status: true
+      }
+            this.$store.commit('login', false);
         },
-        mounted() {
-            this.connection = new signalR.HubConnectionBuilder()
-                .withUrl("http://localhost:5276/chat")
-                .build();
+        typeOfMessage(id) {
+            return id === this.id ? 'ContentMessageUser' : 'ContentMessage';
+        },
+        sendMessage() {
+            this.connection.invoke("SendMessage", this.user, this.messageUser.message, this.groupNameProp)
+            .then(() => console.log('Message sent', this.user, this.messageUser.message, this.groupNameProp))
+            .catch(err => console.log('Error while sending message: ' + err));
+        }
+    },
+    mounted() {
+        this.connection = new signalR.HubConnectionBuilder()
+            .withUrl("https://chat-penguin-api.onrender.com/chat")
+            .build();
 
             this.connection.start().then(() => {
                     console.log('Connection started');
