@@ -102,6 +102,7 @@
             }
         },
         mounted() {
+            ///"https://chat-penguin-api.onrender.com/chat"
             this.connection = new signalR.HubConnectionBuilder()
                 .withUrl("https://chat-penguin-api.onrender.com/chat")
                 .build();

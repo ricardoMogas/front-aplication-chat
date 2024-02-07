@@ -5,7 +5,8 @@ export default createStore({
     logged: {
       status: false,
       userName: ''
-    }
+    },
+    currentGroup: ""
   },
   getters: {
   },
@@ -14,6 +15,9 @@ export default createStore({
     login(state, newValue) {
       state.logged.status = newValue.status;
       state.logged.userName = newValue.userName;
+    },
+    changeGroup(state, newValue) {
+      state.currentGroup = newValue;
     }
   },
   actions: {

@@ -41,6 +41,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'ChatList',
   data() {
@@ -80,6 +82,27 @@ export default {
     entrarAlChat() {
       this.$emit('entrar-al-chat');
     },
+    async getGroup(){
+      /*
+      try {
+        const response = await axios.post('https://localhost:7159/api/Groups');
+        
+        // Manejar la respuesta del servidor
+        console.log(response.data);
+        
+        // Aquí puedes redirigir al usuario a otra página si el inicio de sesión fue exitoso
+      } catch (error) {
+        console.error('Error al iniciar sesión:', error);
+        // Manejar el error, mostrar un mensaje al usuario, etc.
+      }
+      */
+    }
+  },
+  mounted() {
+    // Lógica para cargar la lista de chats
+    // Puedes hacer una llamada a la API o realizar cualquier acción necesaria.
+    // Por ahora, solo imprimiremos la lista de chats.
+    //this.getGroup();
   },
 };
 </script>

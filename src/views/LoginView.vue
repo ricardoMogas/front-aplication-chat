@@ -58,7 +58,7 @@ export default {
     };
   },
   methods: {
-    login() {
+    async login() {
       if (!this.userName || !this.password) {
         alert("Please fill in all required fields!");
         return; // Cancel login if required fields are empty
