@@ -1,6 +1,5 @@
 <template>
   <div class="chat-list-container">
-
     <!-- Barra de búsqueda -->
     <div class="search-bar">
       <!-- Icono de perfil grande -->
@@ -15,7 +14,6 @@
     <div class="groupList">
       <!-- Iterar a través de los chats filtrados -->
       <div v-for="(chat, index) in filteredChats" :key="index" class="chat-item">
-
         <!-- Ovalo de icono de perfil pequeño en cada chat -->
         <div class="profile-icon"></div>
 
@@ -34,15 +32,14 @@
         </div>
 
         <!-- Botón de entrada con estilo personalizado -->
-        <button class="simpleButton" style="float: right;">
-          Entrar
-        </button>
+        <div class="chat-sidebar">
+          <button @click="entrarAlChat">Entrar</button>
+        </div>
       </div>
     </div>
-
   </div>
 </template>
-  
+
 <script>
 export default {
   name: 'ChatList',
@@ -72,32 +69,33 @@ export default {
         chat.username.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
         chat.lastMessage.toLowerCase().includes(this.searchQuery.toLowerCase())
       );
-    }
-    ,
+    },
   },
   methods: {
     // Método para abrir un chat con el usuario seleccionado
     openChat(chat) {
       console.log('Abriendo chat con', chat.username);
     },
+    // Método para emitir el evento de entrar al chat
+    entrarAlChat() {
+      this.$emit('entrar-al-chat');
+    },
   },
 };
 </script>
-  
+
 <style scoped>
 /* Estilos específicos del componente aquí CSS */
 
 .groupList {
   overflow-y: auto;
-  height: 537px;
-  /* Ajusta esto a la altura deseada */
+  height: 537px; /* Ajusta esto a la altura deseada */
 }
 
 .profile-icon-large {
   width: 50px;
   height: 50px;
-  background-color: #c8a2c8;
-  /* Morado lila */
+  background-color: #c8a2c8; /* Morado lila */
   border-radius: 50%;
   margin-right: 15px;
 }
@@ -105,10 +103,8 @@ export default {
 .chat-list-container {
   display: grid;
   grid-template-columns: 100%;
-  grid-template-rows: 10% 90%;
-  /* Updated row sizes */
-  height: 100vh;
-  /* determina el alto de la pantalla para que se adapten las columnas */
+  grid-template-rows: 10% 90%; /* Updated row sizes */
+  height: 100vh; /* determina el alto de la pantalla para que se adapten las columnas */
   background: repeating-linear-gradient(#332638, #6d5391, #332638);
 }
 
@@ -117,9 +113,8 @@ export default {
   align-items: center;
   padding: 10px;
   background: #222;
-  color: #c8a2c8;
-  /* Morado lila */;
-  border-right: 1px solid #ffffff15;;
+  color: #c8a2c8; /* Morado lila */
+  border-right: 1px solid #ffffff15;
 }
 
 .search-bar input {
@@ -145,16 +140,14 @@ export default {
 .profile-icon {
   width: 40px;
   height: 40px;
-  background-color: #c8a2c8;
-  /* Morado lila */
+  background-color: #c8a2c8; /* Morado lila */
   border-radius: 50%;
   margin-right: 15px;
 }
 
 .open-chat-button {
   margin-right: 10px;
-  background-color: #25d366;
-  /* Verde de WhatsApp */
+  background-color: #25d366; /* Verde de WhatsApp */
   color: #fff;
   border: none;
   border-radius: 50%;
@@ -166,8 +159,7 @@ export default {
   flex-grow: 1;
 }
 
-h3,
-p {
+h3, p {
   margin: 0;
 }
 </style>

@@ -2,10 +2,10 @@
   <div class="home">
     <main class="grid">
       <section class="sideBar">
-        <ChatSideBar ></ChatSideBar>
+        <ChatSideBar @entrar-al-chat="entrarAlChat"></ChatSideBar>
       </section>
       <section class="chat">
-        <ChatArea :groupNameProp="groupName"></ChatArea>
+        <ChatArea :groupNameProp="groupName" :historialChat="historialChat"></ChatArea>
       </section>
     </main>
   </div>
@@ -15,26 +15,32 @@
 // @ is an alias to /src
 import ChatArea from '@/components/ChatArea.vue';
 import ChatSideBar from '@/components/ChatSideBar.vue';
+
 export default {
   name: 'HomeView',
   components: {
     ChatSideBar,
     ChatArea,
-    ChatSideBar
   },
   data() {
     return {
-      groupName: 'forumGroup'
-    }
-  },
-  computed: {
-    loggedIn() {
-      return this.$store.state.logged;
-    },
+      groupName: 'forumGroup',
+      historialChat: []  // Agrega un array para almacenar el historial del chat
+    };
   },
   methods: {
+    entrarAlChat() {
+      // Lógica para cargar el historial de chat cuando se hace clic en "Entrar"
+      // Puedes hacer una llamada a la API o realizar cualquier acción necesaria.
+      // Por ahora, solo actualizaremos el historial de chat con un ejemplo.
+      this.historialChat = [
+        { usuario: 'Usuario1', mensaje: 'Hola' },
+        { usuario: 'Usuario2', mensaje: 'Hola también' }
+        // Agrega más mensajes según sea necesario
+      ];
+    }
   }
-}
+};
 </script>
 
 <style scoped>
@@ -44,5 +50,4 @@ export default {
   grid-template-columns: 1fr 2fr; /* determina el tamaño de las columnas */
   height: 100vh;
 }
-
-</style>    
+</style>

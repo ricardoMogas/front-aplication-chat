@@ -1,68 +1,91 @@
 <template>
-  <!-- partial:index.partial.html -->
-    <body>
-      <section>
+  <body>
+    <section>
       <div class="signin">
         <div class="content">
-          <img src="../assets/logoChat.png" alt="Uachat" :style="{ width: '100px', height: 'auto'}">
-          <h2>Sign In</h2>
+          <img src="../assets/logoChat.png" alt="Uachat" :style="{ width: '80px', height: 'auto' }">
+          <h2 v-if="!isSignup">Sign In</h2>
+          <h2 v-else>Sign Up</h2>
           <div class="form">
-
+            <div class="inputBox" v-if="!isSignup">
+              <input v-model="userName" type="text" required>
+              <i>Username</i>
+            </div>
+            <div class="inputBox" v-else>
+              <input v-model="firstName" type="text" required>
+              <i>First Name</i>
+            </div>
+            <div class="inputBox" v-if="isSignup">
+              <input v-model="lastName" type="text" required>
+              <i>Last Name</i>
+            </div>
             <div class="inputBox">
-
-              <input v-model="userName" type="text" required> <i>Username</i>
-
+              <input :type="showPassword ? 'text' : 'password'" v-model="password" required>
+              <i>Password</i>
+              <button id="whachPassword" class="simpleButton" @click="toggleShowPassword">{{ showPassword ? 'Hide' :
+                'Show' }}</button>
             </div>
-
+            <div class="inputBox" v-if="isSignup">
+              <input v-model="email" type="email" required>
+              <i>Email</i>
+            </div>
+            <div class="links" v-if="!isSignup" style="text-align: right;"> <!-- Alineado a la derecha -->
+              <a href="#" @click="toggleSignup" style="color: #7355A4; text-align: right;">Signup</a>
+            </div>
             <div class="inputBox">
-              <input :type="showPassword  ? 'text' : 'password'" v-model="password" required> <i>contraseña</i>
-              <button id="whachPassword" class="simpleButton" @click="toggleShowPassword">{{ showPassword ? 'Ocultar' : 'Mostrar' }}</button>
+              <input @click="isSignup ? signup() : login()" type="submit" :value="isSignup ? 'Accept' : 'Accept'"
+                class="smallButton">
             </div>
-
-            <div class="links"> 
-              <a href="#">Forgot Password</a> 
-              <a href="#">Signup</a>
-            </div>
-
-            <div class="inputBox">
-
-              <input @click="login" type="submit" value="Login">
-
-            </div>
-
           </div>
-        </div>  
+        </div>
       </div>
-    </section> <!-- partial -->
-    </body>
-  <!-- partial -->
+    </section>
+  </body>
 </template>
+
 <script>
 export default {
   name: 'LoginView',
-  components: {},
   data() {
     return {
       userName: '',
       password: '',
-      showPassword: false
-    }
+      showPassword: false,
+      firstName: '',
+      lastName: '',
+      email: '',
+      isSignup: false,
+    };
   },
-  computed: {},
   methods: {
-    login(){
-      const newValues = {
-        userName: this.userName,
-        status: true
+    login() {
+      if (!this.userName || !this.password) {
+        alert("Please fill in all required fields!");
+        return; // Cancel login if required fields are empty
       }
-      this.$store.commit('login', newValues)
+      const newValues = { userName: this.userName, status: true };
+      this.$store.commit('login', newValues);
+      // Navigate to chat page or perform other actions after login
+    },
+    signup() {
+      if (!this.firstName || !this.lastName || !this.password || !this.email) {
+        alert("Please fill in all required fields!");
+        return; // Cancel signup if required fields are empty
+      }
+      const newValues = { userName: this.userName, status: true };
+      this.$store.commit('login', newValues);
+      // Navigate to chat page or perform other actions after signup
     },
     toggleShowPassword() {
       this.showPassword = !this.showPassword;
-    }
-  }
-}
+    },
+    toggleSignup() {
+      this.isSignup = !this.isSignup;
+    },
+  },
+};
 </script>
+
 
 <style scoped>
 * {
@@ -91,7 +114,8 @@ section {
   overflow: hidden;
 }
 
-section::before { /* Efecto de fondo de ondulacion */
+section::before {
+  /* Efecto de fondo de ondulacion */
   content: '';
   position: absolute;
   width: 100%;
@@ -99,6 +123,7 @@ section::before { /* Efecto de fondo de ondulacion */
   background: repeating-linear-gradient(#000, #7355A4, #000);
   animation: animate 5s linear infinite;
 }
+
 @keyframes animate {
   0% {
     transform: translateY(-100%);
@@ -132,7 +157,8 @@ section .signin .content {
   gap: 40px;
 }
 
-section .signin .content h2 { /* Titulos del login */
+section .signin .content h2 {
+  /* Titulos del login */
   font-size: 2em;
   color: #7355A4;
   text-transform: uppercase;
@@ -155,17 +181,20 @@ section .signin .content .form .inputBox input {
   width: 100%;
   background: #6F6D73;
   border: none;
-  padding: 25px 10px 7.5px;
+  padding: 15px 10px;
+  /* Reducción del padding en los campos de entrada */
   border-radius: 4px;
   color: #fff;
   font-weight: 500;
-  font-size: 1em;
+  font-size: 0.9em;
+  /* Reducción del tamaño de la fuente */
 }
 
 section .signin .content .form .inputBox i {
   position: absolute;
   left: 0;
-  padding: 15px 10px;
+  padding: 12px 10px;
+  /* Reducción del padding en el ícono */
   font-style: normal;
   color: #aaa;
   transition: 0.5s;
@@ -178,12 +207,15 @@ section .signin .content .form .inputBox i {
   font-size: 0.8em;
   color: #fff;
 }
+
 .form .inputBox input:focus {
   outline: 3px #7355A4 solid;
-  background: #000 !important; /* CORREGIR, NO USAR SIEMPRE !important */
+  background: #000 !important;
+  /* CORREGIR, NO USAR SIEMPRE !important */
 }
 
-.signin .content .form .links { /* Contenedor de olvidar contraseña y regitrarse */
+.signin .content .form .links {
+  /* Contenedor de olvidar contraseña y regitrarse */
   position: relative;
   width: 100%;
   display: flex;
@@ -201,11 +233,13 @@ section .signin .content .form .inputBox i {
 }
 
 .signin .content .form .inputBox input[type="submit"] {
-  padding: 10px;
+  padding: 8px;
+  /* Reducción del padding del botón */
   background: #7355A4;
   color: #fff;
   font-weight: 600;
-  font-size: 1.35em;
+  font-size: 1em;
+  /* Reducción del tamaño de la fuente */
   letter-spacing: 0.05em;
   cursor: pointer;
 }
