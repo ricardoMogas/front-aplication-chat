@@ -72,5 +72,13 @@ body {
   outline: 3px #7355A4 solid;
   background: #000 !important; /* CORREGIR, NO USAR SIEMPRE !important */
 }
+.simpleDialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #222;
+  padding: 20px;
+}
 </style>
 

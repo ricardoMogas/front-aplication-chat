@@ -44,6 +44,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   name: 'LoginView',
   data() {
@@ -63,8 +64,27 @@ export default {
         alert("Please fill in all required fields!");
         return; // Cancel login if required fields are empty
       }
-      const newValues = { userName: this.userName, status: true };
-      this.$store.commit('login', newValues);
+      axios.post('https://localhost:7159/api/Users/Login', {
+        user: this.userName,
+        password: this.password
+      })
+      .then(response => {
+        if (response.data.success) {
+          // guardar el token en store
+          this.$store.commit('setToken', response.data.data);
+          console.log(response.data.data);
+          // Ahora el token está disponible globalmente en tu aplicación Vue
+          // Puedes acceder a él usando this.$store.state.token
+          const newValues = { userName: this.userName, status: true };
+          this.$store.commit('login', newValues);
+        } else {
+          console.log('fallo en el post')
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        // Manejar errores de red u otros errores
+      });
       // Navigate to chat page or perform other actions after login
     },
     signup() {
@@ -72,8 +92,7 @@ export default {
         alert("Please fill in all required fields!");
         return; // Cancel signup if required fields are empty
       }
-      const newValues = { userName: this.userName, status: true };
-      this.$store.commit('login', newValues);
+      
       // Navigate to chat page or perform other actions after signup
     },
     toggleShowPassword() {

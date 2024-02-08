@@ -2,22 +2,20 @@
   <div class="chat-list-container">
     <div class="search-bar">
       <div class="profile-icon-large"></div>
-      <input v-model="searchQuery" placeholder="Buscar..." />
+      <input class="simpleInput" placeholder="search" />
       <i class="fas fa-search"></i>
     </div>
 
     <div class="groupList">
-      <div v-for="(chat, index) in filteredChats" :key="index" class="chat-item">
-        <div class="profile-icon"></div>
+      <div v-for="group in groups" :key="group.idIssue" class="chat-item">
         <button class="open-chat-button" @click="openChat(chat)">
           <i class="fas fa-comment"></i>
         </button>
         <div class="chat-info">
-          <h3>{{ chat.name }}</h3>
-          <p>{{ chat.description }}</p>
+          <h3>{{ group.nameGroup }}</h3>
         </div>
         <div class="chat-sidebar">
-          <button @click="entrarAlChat(chat)">Entrar</button>
+          <button @click="enterTheChat(group.nameGroup, group.idGroup)">Entrar</button>
         </div>
       </div>
     </div>
@@ -31,75 +29,63 @@ export default {
   name: 'ChatList',
   data() {
     return {
-      chats: [
-        {
-          "message": null,
-          "success": true,
-          "data": [
-            {
-              "id": "65bc76523b256234fa384ed9",
-              "name": "Programación",
-              "description": "Grupo para hablar de la tiradera del codigo",
-              "image": "string",
-              "createdDate": "2024-02-02T04:55:04.766Z",
-              "visibility": "Public",
-              "owner": null
-            },
-            {
-              "id": "65be8e51e275485a12ac7c2f",
-              "name": "UNID",
-              "description": "preparatoria",
-              "image": "miguel.png",
-              "createdDate": "2024-02-03T19:03:52.037Z",
-              "visibility": "Private",
-              "owner": null
-            },
-            {
-              "id": "65c1770a53262086541744b7",
-              "name": "Sistemas distribuidos",
-              "description": "Grupo para hablar de programación y más",
-              "image": "string",
-              "createdDate": "2024-02-05T17:59:12.583Z",
-              "visibility": "Public",
-              "owner": "65b81bc7d55e802544702eb6"
-            },
-            {
-              "id": "65c17c262a7eb59f9cdebff2",
-              "name": "Amigos de distribuidos",
-              "description": "Grupo para clase de Sistemas Distribuidos",
-              "image": "string",
-              "createdDate": "2024-02-06T00:23:32.795Z",
-              "visibility": "Public",
-              "owner": "65b81bc7d55e802544702eb6"
-            }
-          ]
-        }
-      ],
-      searchQuery: '',
+      groups: [],
+      dataAddGroup: {
+        email: '',
+        idGroup: '',
+        joinedDate: '',
+        rol: ''
+      },
     };
   },
-  computed: {
-    filteredChats() {
-      return this.chats[0].data.filter(chat =>
-        chat.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-        chat.description.toLowerCase().includes(this.searchQuery.toLowerCase())
-      );
-    },
+  mounted() {
+    this.getIssues();
   },
   methods: {
     openChat(chat) {
       this.$emit('chat-opened', chat.name);
     },
-    entrarAlChat(chat) {
-      if (chat && chat.messages && chat.messages.length > 0) {
-        this.$emit('entrar-al-chat', chat);
-      } else {
-        alert('No hay historial vigente en este chat.');
+    enterTheChat(chat, idIssue) {
+      console.log(chat)
+      //converitr de json a objeto normal
+      const name = JSON.stringify(chat);
+      //quitar comillas al inicio y final
+      console.log(name.replace(/^"(.*)"$/, '$1'))
+      const group = {
+        name: name.replace(/^"(.*)"$/, '$1'),
+        enterGroup: true,
+        id: idIssue
+      }
+      this.$store.commit('changeGroup', group);
+    },
+    async getIssues() {
+      try {
+        const response = await axios.get('https://localhost:7159/api/Issues');
+        // Asigna directamente los datos de respuesta a this.Groups
+        this.groups = response.data.data;
+        console.log(this.groups); // Comprueba que los datos se hayan asignado correctamente
+      } catch (error) {
+        console.error('Error al obtener los issues:', error);
       }
     },
+
+    convertDate() {
+      const fechaHoraActual = new Date();
+      const year = fechaHoraActual.getFullYear();
+      const month = String(fechaHoraActual.getMonth() + 1).padStart(2, '0'); // Los meses van de 0 a 11
+      const day = String(fechaHoraActual.getDate()).padStart(2, '0');
+      const hours = String(fechaHoraActual.getHours()).padStart(2, '0');
+      const minutes = String(fechaHoraActual.getMinutes()).padStart(2, '0');
+      const seconds = String(fechaHoraActual.getSeconds()).padStart(2, '0');
+
+      const fechaHoraFormateada = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}Z`;
+
+      return fechaHoraFormateada;
+    }
   },
 };
 </script>
+
 
 <style scoped>
 .groupList {
