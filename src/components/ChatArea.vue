@@ -8,11 +8,11 @@
           <h3 style="color: #fff;">Rol</h3>
           <input class="simpleInput" v-model="dataAddGroup.rol" type="text">
         </section>
-        <section v-if="loading === false">
+        <section v-if="loadingAddToGroup === false">
           <button class="simpleButton" @click="AddUserToGroup">registrar</button>
           <button class="simpleButton" @click="statusModal">Cerrar</button>
         </section>
-        <Loader :showLoader="loading" typeLoader="1"></Loader>
+        <Loader :showLoader="loadingAddToGroup" :typeLoader="1"></Loader>
       </dialog>
       <button class="simpleButton" @click="logOut">LogOut</button>
       <button class="simpleButton" @click="statusModal">add to group {{ groupNameProp }}</button>
@@ -27,7 +27,7 @@
         </div>
       </div>
       <div v-else style="text-align: center; padding: 50px;">
-        <Loader :showLoader="loading" :typeLoader="1"></Loader>
+        <Loader :showLoader="loading" :typeLoader="2"></Loader>
         <p v-if="loading === false">No hay mensajes</p>
       </div>
     </main>
@@ -78,6 +78,7 @@ export default {
   },
   data() {
     return {
+      loadingAddToGroup: false,
       loading: false,
       showEmojiPicker: false,
       connection: null,
@@ -126,6 +127,7 @@ export default {
       this.showModal = !this.showModal;
     },
     async AddUserToGroup() {
+      this.loadingAddToGroup = true;
       try {
         const response = await axios.post(`${process.env.VUE_APP_API_URL}/api/Issues`, {
           email: this.dataAddGroup.email,
@@ -133,6 +135,7 @@ export default {
           joinedDate: this.convertHour(),
           rol: this.dataAddGroup.rol
         });
+        this.loadingAddToGroup = false;
         console.log(response.data);
       } catch (error) {
         console.error('Error al agregar usuario al grupo: no existe el usuario');
@@ -238,6 +241,12 @@ export default {
       }
     });
   },
+  updated() {
+    this.$nextTick(function () {
+      let mainChat = this.$el.querySelector('.mainChat');
+      mainChat.scrollTop = mainChat.scrollHeight;
+    })
+  }
 };
 </script>
 
