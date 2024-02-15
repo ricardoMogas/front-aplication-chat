@@ -118,7 +118,7 @@ export default {
     },
     async AddUserToGroup() {
       try {
-        const response = await axios.post('https://localhost:7159/api/Issues', {
+        const response = await axios.post(`${process.env.VUE_APP_API_URL}/api/Issues`, {
           email: this.dataAddGroup.email,
           idGroup: this.groupIdProp,
           joinedDate: this.convertHour(),
@@ -147,7 +147,7 @@ export default {
     async saveMessage() {
       try {
         const hour = this.convertHour();
-        const response = await axios.post('https://localhost:7159/api/Messages', {
+        const response = await axios.post(`${process.env.VUE_APP_API_URL}/api/Messages`, {
           groupId: this.groupIdProp,
           sendDate: hour,
           text: this.messageUser.bodyMessage
@@ -160,7 +160,7 @@ export default {
     async getmessages() {
       console.log('Obteniendo mensajes de ' + this.groupNameProp);
       try {
-        const response = await axios.get(`https://localhost:7159/api/Messages/group/${this.groupIdProp}`);
+        const response = await axios.get(`${process.env.VUE_APP_API_URL}/api/Messages/group/${this.groupIdProp}`);
         const data = response.data.data;
 
         // Obtener la fecha actual sin milisegundos
@@ -203,7 +203,7 @@ export default {
     this.getmessages();
     //https://chat-penguin-api.onrender.com/chat
     this.connection = new signalR.HubConnectionBuilder()
-      .withUrl("https://localhost:7159/chat")
+      .withUrl(`${process.env.VUE_APP_API_URL}/chat`)
       .build();
 
     this.connection.start().then(() => {

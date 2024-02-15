@@ -58,13 +58,17 @@ export default {
       isSignup: false,
     };
   },
+  mounted() {
+    const apiBase = process.env.VUE_APP_API_URL
+    console.log(apiBase);
+  },
   methods: {
     async login() {
       if (!this.userName || !this.password) {
         alert("Please fill in all required fields!");
         return; // Cancel login if required fields are empty
       }
-      axios.post('https://localhost:7159/api/Users/Login', {
+      axios.post(`${process.env.VUE_APP_API_URL}/api/Users/Login`, {
         user: this.userName,
         password: this.password
       })

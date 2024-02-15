@@ -60,7 +60,7 @@ export default {
     },
     async getIssues() {
       try {
-        const response = await axios.get('https://localhost:7159/api/Issues');
+        const response = await axios.get(`${process.env.VUE_APP_API_URL}/api/Issues`);
         // Asigna directamente los datos de respuesta a this.Groups
         this.groups = response.data.data;
         console.log(this.groups); // Comprueba que los datos se hayan asignado correctamente
