@@ -18,17 +18,22 @@
           <button @click="enterTheChat(group.nameGroup, group.idGroup)">Entrar</button>
         </div>
       </div>
+      <Loader :showLoader="loading" :typeLoader="1" />
     </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
-
+import Loader from '@/components/Loader.vue'
 export default {
-  name: 'ChatList',
+  name: 'ChatSideBar',
+  components: {
+    Loader
+  },
   data() {
     return {
+      loading: false,
       groups: [],
       dataAddGroup: {
         email: '',
@@ -59,12 +64,15 @@ export default {
       this.$store.commit('changeGroup', group);
     },
     async getIssues() {
+      this.loading = true;
       try {
         const response = await axios.get(`${process.env.VUE_APP_API_URL}/api/Issues`);
         // Asigna directamente los datos de respuesta a this.Groups
+        this.loading = false;
         this.groups = response.data.data;
         console.log(this.groups); // Comprueba que los datos se hayan asignado correctamente
       } catch (error) {
+        this.loading = false;
         console.error('Error al obtener los issues:', error);
       }
     },
@@ -90,7 +98,7 @@ export default {
 <style scoped>
 .groupList {
   overflow-y: auto;
-  height: 537px;
+  height: auto;
 }
 
 .profile-icon-large {

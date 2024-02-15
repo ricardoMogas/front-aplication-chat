@@ -22,19 +22,21 @@
             <div class="inputBox">
               <input :type="showPassword ? 'text' : 'password'" v-model="password" required>
               <i>Password</i>
-              <button id="whachPassword" class="simpleButton" @click="toggleShowPassword">{{ showPassword ? 'Hide' :
-                'Show' }}</button>
+              <button id="whachPassword" class="simpleButton" @click="toggleShowPassword">
+                {{ showPassword ? 'Hide' : 'Show' }}
+              </button>
             </div>
             <div class="inputBox" v-if="isSignup">
               <input v-model="email" type="email" required>
               <i>Email</i>
             </div>
-            <div class="links" v-if="!isSignup" style="text-align: right;"> <!-- Alineado a la derecha -->
+            <!-- signup button -->
+            <div class="links" v-if="!isSignup" style="text-align: right;">
               <a href="#" @click="toggleSignup" style="color: #7355A4; text-align: right;">Signup</a>
             </div>
             <div class="inputBox">
-              <input @click="isSignup ? signup() : login()" type="submit" :value="isSignup ? 'Accept' : 'Accept'"
-                class="smallButton">
+              <input v-if="loading === false" @click="isSignup ? signup() : login()" type="submit" :value="isSignup ? 'Accept' : 'Accept'">
+              <Loader :showLoader="loading" :typeLoader="1"></Loader>
             </div>
           </div>
         </div>
@@ -45,17 +47,23 @@
 
 <script>
 import axios from 'axios';
+import Loader from '@/components/Loader.vue';
+
 export default {
   name: 'LoginView',
+  components: {
+    Loader
+  },
   data() {
     return {
+      loading: false,
+      showPassword: false,
+      isSignup: false,
       userName: '',
       password: '',
-      showPassword: false,
       firstName: '',
       lastName: '',
       email: '',
-      isSignup: false,
     };
   },
   mounted() {
@@ -68,41 +76,70 @@ export default {
         alert("Please fill in all required fields!");
         return; // Cancel login if required fields are empty
       }
+      this.loading = true;
       axios.post(`${process.env.VUE_APP_API_URL}/api/Users/Login`, {
         user: this.userName,
         password: this.password
       })
-      .then(response => {
-        if (response.data.success) {
-          // guardar el token en store
-          this.$store.commit('setToken', response.data.data);
-          console.log(response.data.data);
-          // Ahora el token está disponible globalmente en tu aplicación Vue
-          // Puedes acceder a él usando this.$store.state.token
-          const newValues = { userName: this.userName, status: true };
-          this.$store.commit('login', newValues);
-        } else {
-          console.log('fallo en el post')
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        // Manejar errores de red u otros errores
-      });
+        .then(response => {
+          if (response.data.success) {
+            // guardar el token en store
+            this.$store.commit('setToken', response.data.data);
+            console.log(response.data.data);
+            // Ahora el token está disponible globalmente en tu aplicación Vue
+            // Puedes acceder a él usando this.$store.state.token
+            const newValues = { userName: this.userName, status: true };
+            this.$store.commit('login', newValues);
+            this.loading = false;
+          } else {
+            console.log('fallo en el post')
+            this.loading = false;
+          }
+        })
+        .catch(error => {
+          this.loading = false
+          console.error('Error:', error);
+          // Manejar errores de red u otros errores
+        });
       // Navigate to chat page or perform other actions after login
     },
-    signup() {
+    async signup() {
       if (!this.firstName || !this.lastName || !this.password || !this.email) {
         alert("Please fill in all required fields!");
         return; // Cancel signup if required fields are empty
       }
-      
-      // Navigate to chat page or perform other actions after signup
+      this.loading = true;
+      const fullName = `${this.firstName} ${this.lastName}`
+      axios.post(`${process.env.VUE_APP_API_URL}/api/Users`, {
+        email: this.email,
+        password: this.password,
+        userName: fullName,
+        Image: 'string'
+      })
+        .then(response => {
+          if (response.data.success) {
+            this.loading = false;
+            this.isSignup = false;
+            console.log(response.data.data);
+            alert("Registro Completo");
+            // Ahora el token está disponible globalmente en tu aplicación Vue
+            // Puedes acceder a él usando this.$store.state.token
+
+          } else {
+            this.loading = false
+            console.log('fallo en el post')
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          // Manejar errores de red u otros errores
+        });
     },
     toggleShowPassword() {
       this.showPassword = !this.showPassword;
     },
     toggleSignup() {
+      this.password = '';
       this.isSignup = !this.isSignup;
     },
   },
@@ -197,6 +234,7 @@ section .signin .content .form {
 section .signin .content .form .inputBox {
   position: relative;
   width: 100%;
+
 }
 
 section .signin .content .form .inputBox input {
@@ -210,6 +248,10 @@ section .signin .content .form .inputBox input {
   color: #fff;
   font-weight: 500;
   font-size: 0.9em;
+  /* Reducción del tamaño de la fuente */
+}
+section .signin .content .form .inputBox div {
+  text-align: center;
   /* Reducción del tamaño de la fuente */
 }
 

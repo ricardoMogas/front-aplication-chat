@@ -67,6 +67,7 @@ body {
   font-weight: 500;
   font-size: 1em;
   width: 85%;
+  margin: 4px;
 }
 .simpleInput:focus {
   outline: 3px #7355A4 solid;
@@ -76,9 +77,12 @@ body {
   position: fixed;
   top: 50%;
   left: 50%;
+  border-radius: 8px;
+  border: none;
   transform: translate(-50%, -50%);
   background: #222;
   padding: 20px;
+  text-align: center;
 }
 </style>
 

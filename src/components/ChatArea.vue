@@ -2,10 +2,17 @@
   <div class="gridChat">
     <nav class="navbar">
       <dialog id="v-dialog" class="simpleDialog">
-        <input class="simpleInput" v-model="dataAddGroup.email" type="text">
-        <input class="simpleInput" v-model="dataAddGroup.rol" type="text">
-        <button class="simpleButton" @click="AddUserToGroup">registrar</button>
-        <button class="simpleButton" @click="statusModal">Cerrar</button>
+        <section>
+          <h3 style="color: #fff;">Email</h3>
+          <input class="simpleInput" v-model="dataAddGroup.email" type="text">
+          <h3 style="color: #fff;">Rol</h3>
+          <input class="simpleInput" v-model="dataAddGroup.rol" type="text">
+        </section>
+        <section v-if="loading === false">
+          <button class="simpleButton" @click="AddUserToGroup">registrar</button>
+          <button class="simpleButton" @click="statusModal">Cerrar</button>
+        </section>
+        <Loader :showLoader="loading" typeLoader="1"></Loader>
       </dialog>
       <button class="simpleButton" @click="logOut">LogOut</button>
       <button class="simpleButton" @click="statusModal">add to group {{ groupNameProp }}</button>
@@ -19,20 +26,15 @@
           <p class="bodyMessage">{{ item.bodyMessage }}</p>
         </div>
       </div>
-      <div v-else style="text-align: center; padding: 50px;">No hay mensajes</div>
+      <div v-else style="text-align: center; padding: 50px;">
+        <Loader :showLoader="loading" :typeLoader="1"></Loader>
+        <p v-if="loading === false">No hay mensajes</p>
+      </div>
     </main>
 
     <footer class="inputChat">
       <div class="conversationPanel">
-        <button class="simpleButton">
-          <svg class="feather feather-plus sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round" aria-hidden="true">
-            <line x1="12" y1="5" x2="12" y2="19"></line>
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-          </svg>
-        </button>
-        <button class="simpleButton">
+        <button class="simpleButton" @click="showPicker()">
           <svg class="feather feather-smile sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
             stroke-linejoin="round" aria-hidden="true">
@@ -60,17 +62,24 @@
 <script>
 import * as signalR from '@microsoft/signalr';
 import axios from 'axios'; // Agrega la importación de axios si no está presente
+import Loader from '@/components/Loader.vue';
+//import EmojiPicker from '@/components/EmojiPicker.vue';
 
 export default {
   name: 'ChatArea',
-
   props: {
     groupNameProp: String,
     groupIdProp: String,
     historialChat: Array,  // Agrega la propiedad 'historialChat' como prop
   },
+  components: {
+    Loader,
+    //EmojiPicker
+  },
   data() {
     return {
+      loading: false,
+      showEmojiPicker: false,
       connection: null,
       messageUser: {
         user: this.$store.state.logged.userName,
@@ -160,12 +169,11 @@ export default {
     async getmessages() {
       console.log('Obteniendo mensajes de ' + this.groupNameProp);
       try {
+        this.loading = true;
         const response = await axios.get(`${process.env.VUE_APP_API_URL}/api/Messages/group/${this.groupIdProp}`);
         const data = response.data.data;
-
         // Obtener la fecha actual sin milisegundos
         const currentDate = this.convertHour().slice(0, -5);
-
         data.forEach(item => {
           // Comparar las fechas sin milisegundos
           console.log(item.date.slice(0, -5), currentDate);
@@ -181,7 +189,10 @@ export default {
             });
           }
         });
+        this.loading = false;
       } catch (error) {
+        this.loading = false;
+        alert('error al obtener mensajes');
         console.error('Error al obtener los mensajes:', error);
       }
     },
@@ -314,4 +325,5 @@ export default {
   background-color: #222;
   border-radius: 4px;
 }
+
 </style>
