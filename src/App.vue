@@ -1,6 +1,7 @@
 <template>
   <LoginView v-if="loggedIn == false" />
   <router-view v-else="loggedIn == true"/>
+  <button>hola</button>
 </template>
 
 <script>
