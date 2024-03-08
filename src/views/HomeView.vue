@@ -1,56 +1,57 @@
 <template>
   <div class="home">
     <main class="grid">
-      <section class="sideBar"></section>
-      <section class="chat"></section>
+      <section class="sideBar">
+        <ChatSideBar></ChatSideBar>
+      </section>
+      <section class="chat">
+        <ChatArea v-if="getCurrentGroup.enterGroup != ''" :groupNameProp="getCurrentGroup.name" :groupIdProp="getCurrentGroup.id" :historialChat="historialChat"></ChatArea>
+        <AddGroupCard v-else></AddGroupCard>
+      </section>
     </main>
-    <button class="simpleButton" @click="logOut">LogOut</button>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import ChatList from '@/components/ChatList.vue';
+import ChatArea from '@/components/ChatArea.vue';
+import ChatSideBar from '@/components/ChatSideBar.vue';
+import AddGroupCard from '@/components/AddGroupCard.vue';
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'HomeView',
   components: {
-    ChatList,
+    ChatSideBar,
+    ChatArea,
+    AddGroupCard
   },
   data() {
     return {
-    }
+      Groups: [],
+      historialChat: []  // Agrega un array para almacenar el historial del chat
+    };
+  },
+  mounted() {
+    //const test = new FetchGet();
   },
   computed: {
-    loggedIn() {
-      return this.$store.state.logged;
-    },
+    ...mapGetters(['getCurrentGroup']),
+    currentGroup() {
+      return this.getCurrentGroup;
+    }
   },
   methods: {
-    logOut() {
-      this.$store.commit('login', false)
-    }
-  }
-}
+  },
+
+};
 </script>
 
 <style scoped>
-
-
 .grid {
   display: grid;
   height: auto;
   grid-template-columns: 1fr 2fr; /* determina el tamaño de las columnas */
   height: 100vh;
 }
-
-.home .grid .sideBar {
-  padding: 20px;
-  border: .1px solid #ddd; /* Borde para visualización */
-}
-
-.home .grid .chat {
-  padding: 20px;
-  border: .1px solid #ddd; /* Borde para visualización */
-}
-
-</style>    
+</style>
+@/classes/FetchGetG.js@/utils/FetchGetGroupMessages.js
