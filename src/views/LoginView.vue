@@ -34,6 +34,9 @@
             <div class="links" v-if="!isSignup" style="text-align: right;">
               <a href="#" @click="toggleSignup" style="color: #7355A4; text-align: right;">Signup</a>
             </div>
+            <div class="links" v-if="isSignup" style="text-align: right;">
+              <a href="#" @click="toggleSignup" style="color: #7355A4; text-align: right;">Login</a>
+            </div>
             <div class="inputBox">
               <input v-if="loading === false" @click="isSignup ? signup() : login()" type="submit" :value="isSignup ? 'Accept' : 'Accept'">
               <Loader :showLoader="loading" :typeLoader="1"></Loader>
@@ -101,7 +104,7 @@ export default {
         .catch(error => {
           this.loading = false
           console.error('Error:', error);
-          // Manejar errores de red u otros errores
+          window.alert('Error de servidor: Origen Inseguro');
         });
       // Navigate to chat page or perform other actions after login
     },
@@ -135,6 +138,9 @@ export default {
         })
         .catch(error => {
           console.error('Error:', error);
+          console.error('Error:', error);
+          window.alert('Error de servidor: Origen Inseguro');
+          this.loading = false;
           // Manejar errores de red u otros errores
         });
     },
