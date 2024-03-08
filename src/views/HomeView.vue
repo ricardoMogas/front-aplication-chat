@@ -6,6 +6,7 @@
       </section>
       <section class="chat">
         <ChatArea v-if="getCurrentGroup.enterGroup != ''" :groupNameProp="getCurrentGroup.name" :groupIdProp="getCurrentGroup.id" :historialChat="historialChat"></ChatArea>
+        <AddGroupCard v-else></AddGroupCard>
       </section>
     </main>
   </div>
@@ -14,6 +15,7 @@
 <script>
 import ChatArea from '@/components/ChatArea.vue';
 import ChatSideBar from '@/components/ChatSideBar.vue';
+import AddGroupCard from '@/components/AddGroupCard.vue';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -21,6 +23,7 @@ export default {
   components: {
     ChatSideBar,
     ChatArea,
+    AddGroupCard
   },
   data() {
     return {
@@ -30,7 +33,6 @@ export default {
   },
   mounted() {
     //const test = new FetchGet();
-    //console.log(test.getResponse());
   },
   computed: {
     ...mapGetters(['getCurrentGroup']),

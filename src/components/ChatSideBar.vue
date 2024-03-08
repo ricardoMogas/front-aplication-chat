@@ -1,21 +1,20 @@
 <template>
   <div class="chat-list-container">
     <div class="search-bar">
-      <div class="profile-icon-large"></div>
-      <input class="simpleInput" placeholder="search" />
-      <i class="fas fa-search"></i>
+      <input class="simpleInput" placeholder="Buscar Grupo" />
+      <button class="simpleButton" @click="exitChat()">Ver Grupos Publicos</button>
     </div>
 
     <div class="groupList">
       <div v-for="group in groups" :key="group.idIssue" class="chat-item">
-        <button class="open-chat-button" @click="openChat(chat)">
+        <button class="open-chat-button" @click="">
           <i class="fas fa-comment"></i>
         </button>
         <div class="chat-info">
           <h3>{{ group.nameGroup }}</h3>
         </div>
         <div class="chat-sidebar">
-          <button @click="enterTheChat(group.nameGroup, group.idGroup)">Entrar</button>
+          <button class="simpleButton"@click="enterTheChat(group.nameGroup, group.idGroup)">Entrar</button>
         </div>
       </div>
       <Loader :showLoader="loading" :typeLoader="1" />
@@ -47,8 +46,8 @@ export default {
     this.getIssues();
   },
   methods: {
-    openChat(chat) {
-      this.$emit('chat-opened', chat.name);
+    exitChat() {
+      this.$store.commit('changeGroup', { name: '', enterGroup: false, id: '' });
     },
     enterTheChat(chat, idIssue) {
       console.log(chat)
@@ -73,6 +72,12 @@ export default {
         console.log(this.groups); // Comprueba que los datos se hayan asignado correctamente
       } catch (error) {
         this.loading = false;
+        if (error.response.status === 401) {
+          localStorage.removeItem('token');
+          this.$store.commit('setToken', '');
+          this.$store.commit('login', { userName: '', status: false });
+          return window.alert('Tu sesión ha expirado, por favor inicia sesión de nuevo');
+        }
         console.error('Error al obtener los issues:', error);
       }
     },

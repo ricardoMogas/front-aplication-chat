@@ -84,6 +84,7 @@ export default {
         .then(response => {
           if (response.data.success) {
             // guardar el token en store
+            localStorage.setItem('token', response.data.data);
             this.$store.commit('setToken', response.data.data);
             console.log(response.data.data);
             // Ahora el token está disponible globalmente en tu aplicación Vue
@@ -93,6 +94,7 @@ export default {
             this.loading = false;
           } else {
             console.log('fallo en el post')
+            window.alert('Usuario o contraseña incorrectos');
             this.loading = false;
           }
         })
@@ -127,6 +129,7 @@ export default {
 
           } else {
             this.loading = false
+            window.alert('Error de servidor al registrar usuario');
             console.log('fallo en el post')
           }
         })

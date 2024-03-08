@@ -34,7 +34,7 @@
 
     <footer class="inputChat">
       <div class="conversationPanel">
-        <button class="simpleButton" @click="showPicker()">
+        <button class="simpleButton" @click="">
           <svg class="feather feather-smile sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
             stroke-linejoin="round" aria-hidden="true">
@@ -114,18 +114,25 @@ export default {
   },
   methods: {
     logOut() {
+      localStorage.removeItem('token');
       const newValues = {
         userName: '',
         status: false
       }
       this.$store.commit('login', newValues);
     },
+
+    
     typeOfMessage(userName) {
       return this.messageUser.user === userName ? 'ContentMessageUser' : 'ContentMessage';
     },
+
+
     statusModal() {
       this.showModal = !this.showModal;
     },
+
+
     async AddUserToGroup() {
       this.loadingAddToGroup = true;
       try {
@@ -141,6 +148,8 @@ export default {
         console.error('Error al agregar usuario al grupo: no existe el usuario');
       }
     },
+
+
     async sendMessage() {
       const data = {
         user: this.messageUser.user,
@@ -156,6 +165,8 @@ export default {
         })
         .catch(err => console.log('Error while sending message: ' + err));
     },
+
+
     async saveMessage() {
       try {
         const hour = this.convertHour();
@@ -169,6 +180,8 @@ export default {
         console.error('Error al guardar el mensaje:', error);
       }
     },
+
+
     async getmessages() {
       console.log('Obteniendo mensajes de ' + this.groupNameProp);
       try {
@@ -199,6 +212,8 @@ export default {
         console.error('Error al obtener los mensajes:', error);
       }
     },
+
+
     convertHour() {
       const fechaHoraActual = new Date();
       const year = fechaHoraActual.getFullYear();

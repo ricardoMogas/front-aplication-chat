@@ -1,9 +1,6 @@
 <template>
   <LoginView v-if="loggedIn == false" />
   <router-view v-else="loggedIn == true"/>
-
-  <button>hola</button>
-  <!--comentarios-->
 </template>
 
 <script>
@@ -15,7 +12,15 @@ export default {
   },
   data() {
     return {
-      nombre: 'asdf',
+    }
+  },
+  mounted() {
+    if (localStorage.getItem('token')) {
+      this.$store.commit('setToken', localStorage.getItem('token'));
+      this.$store.commit('login', { userName: this.userName, status: true })
+    } else {
+      this.$store.commit('setToken', localStorage.getItem('token'));
+      this.$store.commit('login', { userName: this.userName, status: false })
     }
   },
   computed: {
@@ -86,6 +91,13 @@ body {
   background: #222;
   padding: 20px;
   text-align: center;
+}
+.simpleCard {
+    background: #222;
+    border: 1px solid #6F6D73;
+    border-radius: 8px;
+    padding: 10px;
+    margin: 10px;
 }
 </style>
 
